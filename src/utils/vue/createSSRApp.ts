@@ -1,8 +1,9 @@
 import { createApp, Component } from 'vue';
 import { ssrVue } from './ssrVue.js';
+import appWrapper from './appWrapper.js';
 
 export const createSSRApp = (App: Component) => {
-    const app = createApp(App);
+    const app = createApp(appWrapper(App));
     app.use(ssrVue);
     const mount = app.mount;
     // @ts-ignore
