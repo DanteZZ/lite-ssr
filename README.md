@@ -101,13 +101,141 @@ pnpm run build # Не реализовано
 
 ## 🔎 **ИСПОЛЬЗОВАНИЕ**
 
-Тут надо будет описать как пользоваться библиотекой, и какие фишки дбавляет
+### Конфигурация vite плагина
+```typescript
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { lssrVite } from "lite-ssr/dist/vite";
 
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    vue(),
+    lssrVite({
+      entrypoint?: "/src/main.ts" // Опционально, путь к файлу инициализации приложения
+      head?: { // Опционально, конфигурация unhead (https://unhead.unjs.io/usage/composables/use-head#input)
+        title: ""
+      }
+    })
+  ],
+})
+```
+
+### Создание асинхронных сторов
+> Для организации получения данных на стороне сервера и клиента, библиотека предоставляет возможность создавать префетч-сторы, для упрощения работы с асинхронными запросами
+
+Пример создания стора:
+```typescript
+// useData.ts
+import { ref } from "vue";
+import { definePrefetchStore } from "lite-ssr";
+
+export const useData = definePrefetchStore('data', () => {
+    // Инициализация стейтов
+    const data = ref<null | any>(null);
+    const loading = ref<boolean>(false);
+    const error = ref<boolean>(false);
+
+    // Инициализация асинхроных функций
+    const fetchData = async (id: number) => {
+        loading.value = true;
+
+        const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
+        
+        if (response.ok) {
+            data.value = await response.json();
+        } else {
+            data.value = null;
+            error.value = true;
+        }
+
+        loading.value = false;
+    };
+
+    // Возвращаем стейты и функции
+    return {
+        data,
+        loading,
+        error,
+        fetchData
+    }
+})
+```
+
+**! ВАЖНАЯ ИНФОРМАЦИЯ !**
+> Префетч-сторы, как и сторы Pinia требуют уникального наименования. Это нужно для правильно передачи информации полученной на стороне SSR клиенту !
+
+Пример использования получившегося стора:
+```html
+<!--App.vue-->
+<template>
+    <div>
+        <span v-if="loading">Загрузка данных...</span>
+        <span v-else-if="error">Не удалось загрузить данные</span>
+        <pre v-else>{{ serializedData }}</pre>
+    </div>
+</template>
+
+<script setup lang="ts">
+    import { computed, onMounted } from 'vue'
+    import { useData } from "./useData";
+
+    // Подключаем наш стор
+    const { fetchData, data, loading, error } = useData(); 
+
+    // Сериализуем данные для удобочитаемости
+    const serializedData = computed( 
+        () => data ? JSON.stringify(data, null, '\t') : ''
+    )
+
+    // Получаем данные при монтировании компонента
+    onMounted(() => fetchData(1))
+</script>
+```
+<br />
+
+---
+### Префетч данных внутри компонента через useAsyncData (ОСУЖДАЕМ!)
+> Библиотека так же предоставляет собственную альтернативу **useAsyncData** из Nuxt. Но мы настоятельно рекомендуем не использовать его, по причине низкой производительности
+
+```html
+<!--App.vue-->
+<template>
+    <div>
+        <span v-if="loading">Загрузка данных...</span>
+        <span v-else-if="error">Не удалось загрузить данные</span>
+        <pre v-else>{{ serializedData }}</pre>
+    </div>
+</template>
+
+<script setup lang="ts">
+    import { computed, defineProps } from 'vue'
+    import { useAsyncData } from "lite-ssr";
+
+
+    // Инициализируем асинхронный запрос
+    const fetchTodo = async (id: number) => {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`);
+        if (!response.ok) throw new Error();
+        return response.json();
+    };
+
+    // Выполняем запрос
+    const { data, loading, error } = useAsyncData('data', () => fetchTodo(1));
+
+    // Сериализуем данные для удобочитаемости
+    const serializedData = computed( 
+        () => data ? JSON.stringify(data, null, '\t') : ''
+    )
+</script>
+```
+
+> Повторимся, мы крайне не рекомендуем использовать этот подход. Т.к. для отслеживания полученных значений функции требуется получать путь компонента, его пропсы и др. информацию для верной передачи этих данных на клиент. Вместо этого лучше используйте Префетч-сторы!
 <br />
 
 ---
 
-## 💻 **TECHNOLOGIES**
+## 💻 **Технологии**
 
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 

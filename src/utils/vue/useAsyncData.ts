@@ -13,17 +13,17 @@ function hashCode(s: string) {
     }, 0);
 }
 
-function generateComponentPathHash(instance: ComponentInternalInstance): string {
+function generateComponentPathHash(name: string, instance: ComponentInternalInstance): string {
     let path = '';
     let parent = instance?.parent;
     while (parent) {
-        path = `${instance.vnode.key?.toString() || 0}${parent.type.__file || parent.type.name || 'AnonymousComponent'}->${path}`;
+        path = `${name}${JSON.stringify(instance.props)}${instance.vnode.key?.toString() || 0}${parent.type.__file || parent.type.name || 'AnonymousComponent'}->${path}`;
         parent = parent.parent;
     }
     return hashCode(path).toString();
 }
 
-export function useAsyncData<T>(fetchDataFn: () => Promise<T>): UseAsyncDataResult<T> {
+export function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): UseAsyncDataResult<T> {
     const data = ref<T | null>(null);
     const error = ref<Error | null>(null);
     const loading = ref(true);
@@ -34,7 +34,7 @@ export function useAsyncData<T>(fetchDataFn: () => Promise<T>): UseAsyncDataResu
     }
     // Используем кэш из контекста (например, из Vite SSR), если он доступен
     const context = inject<Record<string, any>>('context', {});
-    const key = `c-${generateComponentPathHash(instance)}`;
+    const key = `c-${generateComponentPathHash(name, instance)}`;
     if (context[key]) {
         data.value = context[key];
         loading.value = false;
