@@ -1,5 +1,6 @@
 import { App } from 'vue';
 import { deserializeObject } from '../converter.js';
+import { enrichPrefetchedStores } from './definePrefetchStore.js';
 
 declare global {
     interface Window {
@@ -11,7 +12,9 @@ export const ssrVue = {
     install(app: App) {
         // Гидратация состояния на клиенте
         if (!import.meta.env.SSR) {
-            app.provide('context', deserializeObject(window.__INITIAL_STATE__));
+            const initial = deserializeObject(window.__INITIAL_STATE__);
+            app.provide('context', initial.states);
+            app.provide('contextStores', enrichPrefetchedStores(initial.stores));
         }
     },
 };

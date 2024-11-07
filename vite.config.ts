@@ -4,10 +4,10 @@ import { lssrVite } from './dist/utils/vite'; // Ваш плагин
 export default defineConfig({
     plugins: [
         lssrVite({
-            entry: "/src/entrypoint.ts"
+            entry: "/src/example/main.ts"
         }),
     ],
     server: {
-        port: 1337
+        port: 3000
     }
 });

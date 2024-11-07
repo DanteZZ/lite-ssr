@@ -7,6 +7,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { htmlTemplate } from '../gen/htmlTemplate.js';
 import { lssrViteConfig } from '../utils/vite.js';
 import { serializeObject } from '../utils/converter.js';
+import { simplifyPrefetchedStores } from '../utils/vue/definePrefetchStore.js';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -40,15 +41,19 @@ export async function serve(): Promise<void> {
 
             const template = await vite!.transformIndexHtml(url, htmlTemplate);
             const render = (await vite!.ssrLoadModule(resolve('./renderer.js'))).render;
-            const [appHtml, preloadLinks, context] = await render(entryPoint, url, manifest);
+            const [appHtml, preloadLinks, context, contextStores] = await render(entryPoint, url, manifest);
 
             const html = template
                 .replace(`<!--preload-links-->`, preloadLinks)
-                .replace(`<!--initial-state-->`, `<script>window.__INITIAL_STATE__="${serializeObject(context).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
-                    }"</script>`)
+                .replace(
+                    `<!--initial-state-->`,
+                    `<script>window.__INITIAL_STATE__="${serializeObject({
+                        states: context,
+                        stores: simplifyPrefetchedStores(contextStores)
+                    }).replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"</script>`
+                )
                 .replace('<!--app-html-->', appHtml)
                 .replace('<!--entry-point-->', entryPoint);
-
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         } catch (e) {
             if (vite) {

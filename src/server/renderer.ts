@@ -10,20 +10,28 @@ interface Context {
     modules: string[];
 }
 
-export async function render(entryPoint: string, manifest: Manifest | null = null): Promise<[string, string, Context]> {
+interface ContextStores {
+    [key: string]: any;
+}
+
+export async function render(entryPoint: string, manifest: Manifest | null = null): Promise<[string, string, Context, ContextStores]> {
     const { default: app } = await import(/* @vite-ignore */  `${entryPoint}?${Date.now()}`) as { default: App };
 
     const context: Context = { modules: [] };
+    const contextStores: ContextStores = {};
+
     app.provide('context', context);
+    app.provide('contextStores', contextStores);
 
     const html = await renderToString(app);
+
     let preloadLinks = '';
 
     if (manifest) {
         preloadLinks = renderPreloadLinks(context.modules, manifest);
     }
 
-    return [html, preloadLinks, context];
+    return [html, preloadLinks, context, contextStores];
 }
 
 function renderPreloadLinks(modules: string[], manifest: Manifest): string {
