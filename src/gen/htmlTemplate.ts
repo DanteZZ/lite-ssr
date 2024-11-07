@@ -1,20 +1,19 @@
 export const htmlTemplate =
-    `<!doctype html>
-<html lang="en">
+  `<!doctype html>
+<html<!--htmlAttrs-->>
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <!--headTags-->
     <!-- fonts -->
     <!--preload-links-->
   </head>
-  <body>
+  <body<!--bodyAttrs-->>
+    <!--bodyTagsOpen-->
     <div id="app">
       <!--app-html-->
     </div>
     <!--initial-state-->
     <script type="module" src="<!--entry-point-->"></script>
+    <!--bodyTags-->
   </body>
 </html>
 `

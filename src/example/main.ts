@@ -3,7 +3,7 @@ import { createSSRApp } from '../utils/vue/createSSRApp.js';
 import { definePrefetchStore } from '../utils/vue/definePrefetchStore.js';
 
 const App = defineComponent({
-    async setup() {
+    setup() {
         const useTodoStore = definePrefetchStore('todos', () => {
             const todo = ref<null | any>(null);
 
@@ -18,10 +18,9 @@ const App = defineComponent({
             }
         })
 
-
         const { fetchTodo, todo } = useTodoStore();
-        await fetchTodo(1);
-        await fetchTodo(2);
+        fetchTodo(1);
+
         const timer = ref(0);
         setInterval(() => {
             timer.value++;

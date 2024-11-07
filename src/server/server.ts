@@ -32,8 +32,9 @@ export async function serve(): Promise<void> {
         server: { middlewareMode: true },
         appType: 'custom',
     });
-
-    const entryPoint = (vite.config as unknown as customizedConfig)?.lssr?.entry || "/src/main.ts";
+    const config = (vite.config as unknown as customizedConfig)?.lssr || {}
+    const entryPoint = config?.entry || "/src/main.ts";
+    const headConfig = config?.head;
 
     router.get('/*', async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -41,9 +42,9 @@ export async function serve(): Promise<void> {
 
             const template = await vite!.transformIndexHtml(url, htmlTemplate);
             const render = (await vite!.ssrLoadModule(resolve('./renderer.js'))).render;
-            const [appHtml, preloadLinks, context, contextStores] = await render(entryPoint, url, manifest);
+            const [appHtml, head, preloadLinks, context, contextStores] = await render(entryPoint, headConfig, manifest);
 
-            const html = template
+            let html = template
                 .replace(`<!--preload-links-->`, preloadLinks)
                 .replace(
                     `<!--initial-state-->`,
@@ -54,6 +55,10 @@ export async function serve(): Promise<void> {
                 )
                 .replace('<!--app-html-->', appHtml)
                 .replace('<!--entry-point-->', entryPoint);
+
+            Object.entries(head).forEach(([key, value]) => {
+                html = html.replace(`<!--${key}-->`, value as string)
+            })
             res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
         } catch (e) {
             if (vite) {

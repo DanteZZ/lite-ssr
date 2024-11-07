@@ -1,6 +1,8 @@
 import { basename } from 'node:path';
 import { renderToString } from 'vue/server-renderer';
 import { type App } from 'vue';
+import { createHead, Head } from '@unhead/vue';
+import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr';
 
 interface Manifest {
     [key: string]: string[];
@@ -14,9 +16,11 @@ interface ContextStores {
     [key: string]: any;
 }
 
-export async function render(entryPoint: string, manifest: Manifest | null = null): Promise<[string, string, Context, ContextStores]> {
-    const { default: app } = await import(/* @vite-ignore */  `${entryPoint}?${Date.now()}`) as { default: App };
-
+export async function render(entryPoint: string, headConfig: Head | undefined, manifest: Manifest | null = null): Promise<[string, SSRHeadPayload, string, Context, ContextStores]> {
+    const { default: app } = await import(/* @vite-ignore */ `${entryPoint}?${Date.now()}`) as { default: App };
+    const unhead = createHead();
+    if (headConfig) unhead.push(headConfig);
+    app.use(unhead);
     const context: Context = { modules: [] };
     const contextStores: ContextStores = {};
 
@@ -24,6 +28,7 @@ export async function render(entryPoint: string, manifest: Manifest | null = nul
     app.provide('contextStores', contextStores);
 
     const html = await renderToString(app);
+    const head = await renderSSRHead(unhead);
 
     let preloadLinks = '';
 
@@ -31,7 +36,7 @@ export async function render(entryPoint: string, manifest: Manifest | null = nul
         preloadLinks = renderPreloadLinks(context.modules, manifest);
     }
 
-    return [html, preloadLinks, context, contextStores];
+    return [html, head, preloadLinks, context, contextStores];
 }
 
 function renderPreloadLinks(modules: string[], manifest: Manifest): string {
