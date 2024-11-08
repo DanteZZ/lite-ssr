@@ -22,7 +22,7 @@ export abstract class Renderer {
     }
 
     // Абстрактные методы, которые должны быть реализованы в подклассах
-    abstract renderApp(): Promise<string>;
+    abstract renderApp(url: string): Promise<string>;
     abstract renderHead(): Promise<SSRHeadPayload>;
     renderPreloadLinks(modules: string[]): string {
         return getPreloadLinks(modules, this.manifest);

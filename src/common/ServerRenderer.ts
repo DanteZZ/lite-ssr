@@ -58,7 +58,7 @@ export class ServerRenderer {
         });
 
         // Генерируем части вёрстки
-        const appHtml = await renderer.renderApp();
+        const appHtml = await renderer.renderApp(url);
         const headPayload = await renderer.renderHead();
         const preloadLinks = renderer.renderPreloadLinks([]);
         const context = renderer.getContext();

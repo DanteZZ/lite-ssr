@@ -10,7 +10,7 @@ export class VueRenderer extends Renderer {
     private contextStores = {} as Record<string, unknown>;
     private head = createHead();
 
-    async renderApp(): Promise<string> {
+    async renderApp(url: string): Promise<string> {
         const { default: app } = await import(
             /* @vite-ignore */
             `${this.entryPoint}?${Date.now()}`
@@ -21,6 +21,13 @@ export class VueRenderer extends Renderer {
         app.provide('context', this.context);
         app.provide('contextStores', this.contextStores);
         app.use(this.head);
+
+        // Проверка на использование vue-router
+        const router = app._context.config?.globalProperties?.$router || null;
+        if (router) {
+            router.push(url)
+            await router.isReady();
+        };
 
         return await renderToString(app);
     }
