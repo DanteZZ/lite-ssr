@@ -237,6 +237,37 @@ export const useData = definePrefetchStore('data', () => {
 
 ---
 
+## 📄 **Index.html**
+
+Если вам требуется указать собственную реализацию index.html, необходимо добавить соответствующий путь в конфигурацию плагина `lssrVite`:
+```typescript
+lssrVite({
+    head: "./index.html"
+})
+```
+
+Стандартный `index.html`:
+```html
+<!DOCTYPE html>
+<html<!--htmlAttrs-->>
+  <head>
+    <!--headTags-->
+    <!--preload-links-->
+  </head>
+  <body<!--bodyAttrs-->>
+    <!--bodyTagsOpen-->
+    <div id="app">
+      <!--app-html-->
+    </div>
+    <!--initial-state-->
+    <script type="module" src="<!--entry-point-->"></script>
+    <!--bodyTags-->
+  </body>
+</html>
+```
+<br />
+
+---
 ## 💻 **Технологии**
 
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
