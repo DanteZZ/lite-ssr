@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.3...v0.1.4) (2024-11-08)
+
+
+### Bug Fixes
+
+* Исправлена проверка SSR ([1bb4c5b](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/1bb4c5b46a728a082e9ebaa2fe6732531b78a7e3))
+
 ### [0.1.3](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.2...v0.1.3) (2024-11-08)
 
 
