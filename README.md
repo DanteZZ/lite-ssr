@@ -29,15 +29,12 @@
 
 ## 🗒️ **УСТАНОВКА**
 
-### local installation:
-
-1. Установка библиотеки
-
+1. Установка зависимостей (**Vue**):
 ```bash
-pnpm i lite-ssr
+pnpm i lite-ssr @unhead/vue 
 ```
 
-2. Заменяем `createApp` на `createApp` из ite-ssr
+2. Заменяем `createApp` на `createApp` из lite-ssr
 
 ```ts
 import { createApp } from 'lite-ssr'
@@ -82,11 +79,6 @@ export default defineConfig({
 <br />
 
 ### Запуск проекта:
-Установка зависимостей (**Vue**):
-```bash
-pnpm i lite-ssr @unhead/vue 
-```
-
 Запуск в dev режиме:
 
 ```bash
