@@ -4,6 +4,7 @@ export type HeadConfig = Head;
 
 export interface lssrViteConfig {
     entry?: string
-    head?: HeadConfig;
+    head?: HeadConfig
+    html?: string
 }
 

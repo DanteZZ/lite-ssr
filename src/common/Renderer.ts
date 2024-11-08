@@ -2,6 +2,7 @@ import { SSRHeadPayload } from "@unhead/ssr";
 import { HeadConfig } from "../types/ViteConfig.js";
 import { Manifest } from "./ManifestUtils.js";
 import { FinalContext } from "../types/Context.js";
+import { getPreloadLinks } from "./PreloadUtils.js";
 
 
 export abstract class Renderer {
@@ -23,8 +24,9 @@ export abstract class Renderer {
     // Абстрактные методы, которые должны быть реализованы в подклассах
     abstract renderApp(): Promise<string>;
     abstract renderHead(): Promise<SSRHeadPayload>;
-    abstract renderPreloadLinks(modules: string[]): string;
-
+    renderPreloadLinks(modules: string[]): string {
+        return getPreloadLinks(modules, this.manifest);
+    };
     // Метод для получения контекста
     abstract getContext(): FinalContext
 }

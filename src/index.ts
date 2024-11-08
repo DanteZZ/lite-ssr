@@ -1,0 +1,1 @@
+export { VitePlugin as lssrVite } from "./vite/VitePlugin.js";

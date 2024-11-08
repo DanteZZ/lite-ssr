@@ -1,5 +1,5 @@
 import { renderToString } from 'vue/server-renderer';
-import { createHead } from '@unhead/vue';
+import { createHead, MergeHead, VueHeadClient } from '@unhead/vue';
 import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr';
 import { Renderer } from '../../common/Renderer.js';
 import { App } from 'vue';
@@ -9,6 +9,7 @@ export class VueRenderer extends Renderer {
 
     private context = { modules: [] as string[] };
     private contextStores = {} as Record<string, unknown>;
+    private head = createHead();
 
     async renderApp(): Promise<string> {
         const { default: app } = await import(
@@ -16,24 +17,18 @@ export class VueRenderer extends Renderer {
             `${this.entryPoint}?${Date.now()}`
         ) as { default: App };
 
-        const unhead = createHead();
-        if (this.headConfig) { unhead.push(this.headConfig); }
+        if (this.headConfig) { this.head.push(this.headConfig); }
 
         app.provide('context', this.context);
         app.provide('contextStores', this.contextStores);
-        app.use(unhead);
+        app.use(this.head);
 
         return await renderToString(app);
     }
 
     async renderHead(): Promise<SSRHeadPayload> {
-        const head = await renderSSRHead(createHead());
+        const head = await renderSSRHead(this.head);
         return head;
-    }
-
-    renderPreloadLinks(modules: string[]): string {
-        // Логика прелоадов для Vue
-        return '';
     }
 
     getContext() {

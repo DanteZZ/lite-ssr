@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
-import { lssrVite } from './dist/vite/export'; // Ваш плагин
+import { lssrVite } from './dist'; // Ваш плагин
 
 export default defineConfig({
     plugins: [
         lssrVite({
-            entry: "/src/example/main.ts"
+            entry: "/src/_example/main.ts"
         }),
     ],
     server: {

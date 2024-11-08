@@ -1,6 +1,7 @@
 import { Renderer } from './Renderer.js';
 import { VueRenderer } from '../frameworks/vue/VueRenderer.js';
 import { HeadConfig } from '../types/ViteConfig.js';
+import { Framework } from '../types/Framework.js';
 
 interface IRendererConfig {
     entryPoint: string,
@@ -9,9 +10,11 @@ interface IRendererConfig {
 }
 
 export class RendererFactory {
-    static createRenderer(framework: 'vue', config: IRendererConfig): Renderer {
+    static createRenderer(framework: Framework, config: IRendererConfig): Renderer {
         let renderer: Renderer;
-        if (framework === 'vue') {
+
+        // TODO: Добавить react
+        if (framework === Framework.vue) {
             renderer = new VueRenderer(config.entryPoint, config.headConfig, config.manifest);
         } else {
             throw new Error('Unsupported framework');
