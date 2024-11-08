@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { lssrVite } from './dist/utils/vite'; // Ваш плагин
+import { lssrVite } from './dist/vite/export'; // Ваш плагин
 
 export default defineConfig({
     plugins: [

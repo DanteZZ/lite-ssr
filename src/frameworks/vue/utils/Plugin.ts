@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { deserializeObject } from '../converter.js';
-import { enrichPrefetchedStores } from './definePrefetchStore.js';
+import { deserializeObject } from '../../../utils/Serialize.js';
+import { enrichPrefetchedStores } from './PrefetchStoreConverter.js';
 
 declare global {
     interface Window {
@@ -8,7 +8,7 @@ declare global {
     }
 }
 
-export const ssrVue = {
+export const Plugin = {
     install(app: App) {
         // Гидратация состояния на клиенте
         if (!import.meta.env.SSR) {
