@@ -82,6 +82,10 @@ export default defineConfig({
 <br />
 
 ### Запуск проекта:
+Установка зависимостей (**Vue**):
+```bash
+pnpm i lite-ssr @unhead/vue 
+```
 
 Запуск в dev режиме:
 
@@ -105,7 +109,7 @@ pnpm run build # Не реализовано
 ```typescript
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { lssrVite } from "lite-ssr'
+import { lssrVite } from "lite-ssr"
 
 // https://vite.dev/config/
 export default defineConfig({

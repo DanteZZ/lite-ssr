@@ -1,9 +1,8 @@
 import { renderToString } from 'vue/server-renderer';
-import { createHead, MergeHead, VueHeadClient } from '@unhead/vue';
+import { createHead } from '@unhead/vue';
 import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr';
 import { Renderer } from '../../common/Renderer.js';
 import { App } from 'vue';
-// import { Manifest } from '../../common/ManifestUtils.js';
 
 export class VueRenderer extends Renderer {
 
