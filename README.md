@@ -37,14 +37,14 @@
 pnpm i lite-ssr
 ```
 
-2. Заменяем `createApp` на `createSSRApp` из ite-ssr
+2. Заменяем `createApp` на `createApp` из ite-ssr
 
 ```ts
-import { createSSRApp } from 'lite-ssr'
+import { createApp } from 'lite-ssr'
 import './style.css'
 import App from './App.vue'
 
-createSSRApp(App).mount('#app')
+createApp(App).mount('#app')
 ```
 
 3. Подключение плагина для vite, в `vite.config.ts`
@@ -71,8 +71,8 @@ export default defineConfig({
 {
     ...
     "scripts": {
-        "dev": "lssr",
-        "build": "lssr build", // Ещё не реализовано
+        "dev": "lssr --framework=vue",
+        "build": "lssr --build", // Ещё не реализовано
         ...
     },
     ...
@@ -105,7 +105,7 @@ pnpm run build # Не реализовано
 ```typescript
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { lssrVite } from "lite-ssr/dist/vite";
+import { lssrVite } from "lite-ssr'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -128,7 +128,7 @@ export default defineConfig({
 ```typescript
 // useData.ts
 import { ref } from "vue";
-import { definePrefetchStore } from "lite-ssr";
+import { definePrefetchStore } from "lite-ssr/vue";
 
 export const useData = definePrefetchStore('data', () => {
     // Инициализация стейтов
@@ -210,7 +210,7 @@ export const useData = definePrefetchStore('data', () => {
 
 <script setup lang="ts">
     import { computed, defineProps } from 'vue'
-    import { useAsyncData } from "lite-ssr";
+    import { useAsyncData } from "lite-ssr/vue";
 
 
     // Инициализируем асинхронный запрос

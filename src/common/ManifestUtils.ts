@@ -1,45 +1,16 @@
 import { basename } from 'node:path';
-import { renderToString } from 'vue/server-renderer';
-import { type App } from 'vue';
-import { createHead, Head } from '@unhead/vue';
-import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr';
 
-interface Manifest {
+export interface Manifest {
     [key: string]: string[];
 }
 
-interface Context {
-    modules: string[];
-}
-
-interface ContextStores {
-    [key: string]: any;
-}
-
-export async function render(entryPoint: string, headConfig: Head | undefined, manifest: Manifest | null = null): Promise<[string, SSRHeadPayload, string, Context, ContextStores]> {
-    const { default: app } = await import(/* @vite-ignore */ `${entryPoint}?${Date.now()}`) as { default: App };
-    const unhead = createHead();
-    if (headConfig) unhead.push(headConfig);
-    app.use(unhead);
-    const context: Context = { modules: [] };
-    const contextStores: ContextStores = {};
-
-    app.provide('context', context);
-    app.provide('contextStores', contextStores);
-
-    const html = await renderToString(app);
-    const head = await renderSSRHead(unhead);
-
-    let preloadLinks = '';
-
-    if (manifest) {
-        preloadLinks = renderPreloadLinks(context.modules, manifest);
-    }
-
-    return [html, head, preloadLinks, context, contextStores];
-}
-
-function renderPreloadLinks(modules: string[], manifest: Manifest): string {
+/**
+ * Генерация ссылок для предварительной загрузки файлов, указанных в манифесте
+ * @param modules Модули, для которых нужно рендерить preload-ссылки
+ * @param manifest Манифест с файлами для предварительной загрузки
+ * @returns Строка с HTML-ссылками для preload
+ */
+export function renderPreloadLinks(modules: string[], manifest: Manifest): string {
     let links = '';
     const seen = new Set<string>();
 
@@ -65,6 +36,11 @@ function renderPreloadLinks(modules: string[], manifest: Manifest): string {
     return links;
 }
 
+/**
+ * Генерация HTML-ссылки для preload для одного файла
+ * @param file Путь к файлу
+ * @returns Строка с HTML-ссылкой для preload
+ */
 function renderPreloadLink(file: string): string {
     if (file.endsWith('.js')) {
         return `<link rel="modulepreload" crossorigin href="${file}">`;
@@ -79,7 +55,7 @@ function renderPreloadLink(file: string): string {
     } else if (file.endsWith('.jpg') || file.endsWith('.jpeg')) {
         return `<link rel="preload" href="${file}" as="image" type="image/jpeg">`;
     } else if (file.endsWith('.png')) {
-        return `<link rel="preload" href="${file}" as="image" type="image/png">`;
+        return `<link rel="preload" href= "${file}" as="image" type="image/png">`;
     } else {
         return '';
     }

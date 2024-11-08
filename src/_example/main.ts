@@ -1,6 +1,6 @@
 import { defineComponent, h, ref } from 'vue';
-import { createSSRApp } from '../utils/vue/createSSRApp.js';
-import { definePrefetchStore } from '../utils/vue/definePrefetchStore.js';
+import { createApp } from '../frameworks/vue/export.js'
+import { definePrefetchStore } from '../frameworks/vue/export.js';
 
 const App = defineComponent({
     setup() {
@@ -18,6 +18,8 @@ const App = defineComponent({
             }
         })
 
+
+        // Выполняем запрос
         const { fetchTodo, todo } = useTodoStore();
         fetchTodo(1);
 
@@ -30,7 +32,7 @@ const App = defineComponent({
     },
 });
 
-const app = createSSRApp(App);
+const app = createApp(App);
 app.mount('#app');
 
 export default app;

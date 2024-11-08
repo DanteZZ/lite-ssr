@@ -6,10 +6,14 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "bin": {
-    "lssr": "./dist/serve.js"
+    "lssr": "./dist/bin.js"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./vue": "./dist/frameworks/vue/export.js"
   },
   "scripts": {
-    "start": "tsc && node ./dist/serve.js",
+    "start": "tsc && node ./dist/bin.js --framework=vue",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "tsc",
@@ -45,11 +49,30 @@
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3"
   },
+  "peerDependencies": {
+    "@unhead/react": "^1.11.1",
+    "@unhead/vue": "^1.11.1",
+    "vite": "^5.4.1",
+    "vue": "^3.5.5"
+  },
+  "peerDependenciesMeta": {
+    "@unhead/vue": {
+      "optional": true
+    },
+    "@unhead/react": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
   "dependencies": {
-    "@unhead/ssr": "^1.11.11",
-    "@unhead/vue": "^1.11.11",
-    "express": "^4.18.2",
-    "vite": "^5.4.10",
-    "vue": "^3.5.12"
+    "@unhead/schema": "^1.11.11",
+    "@unhead/ssr": "^1.11.1",
+    "chalk": "^5.3.0",
+    "express": "^4.18.2"
   }
 }
