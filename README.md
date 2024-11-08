@@ -112,10 +112,11 @@ export default defineConfig({
   plugins: [
     vue(),
     lssrVite({
-      entrypoint?: "/src/main.ts" // Опционально, путь к файлу инициализации приложения
+      entrypoint?: "/src/main.ts", // Опционально, путь к файлу инициализации приложения
       head?: { // Опционально, конфигурация unhead (https://unhead.unjs.io/usage/composables/use-head#input)
         title: ""
-      }
+      },
+      html?: "" // Опционально, путь к кастомному html файлу (пользуйтесь с умом!)
     })
   ],
 })
