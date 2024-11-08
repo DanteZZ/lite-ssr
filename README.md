@@ -34,15 +34,20 @@
 pnpm i lite-ssr @unhead/vue 
 ```
 
-2. Заменяем `createApp` на `createApp` из lite-ssr
+2. Заменяем `createApp` на `createApp` из lite-ssr и экспортируем приложение
 
 ```ts
 import { createApp } from 'lite-ssr'
 import './style.css'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+app.mount('#app');
+
+export default app // Обязательно экспортируем app
 ```
+
+> Экспортировать приложение требуется для того, чтобы lite-ssr мог использовать один entry-файл для рендера приложения на сервере и клиенте, а так же для проброса префетч-данных между сервером и клиентом.
 
 3. Подключение плагина для vite, в `vite.config.ts`
 

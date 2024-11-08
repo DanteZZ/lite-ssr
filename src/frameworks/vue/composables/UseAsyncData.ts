@@ -1,4 +1,5 @@
 import { ref, onServerPrefetch, inject, Ref, UnwrapRef, getCurrentInstance, ComponentInternalInstance } from 'vue';
+import { isSSR } from '../../../utils/IsSSR.js';
 
 interface UseAsyncDataResult<T> {
     data: Ref<any, any> | Ref<Ref<any, any> & T, Ref<any, any> & T> | Ref<UnwrapRef<T> | null, T | UnwrapRef<T> | null>;
@@ -60,7 +61,7 @@ export function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): Us
         onServerPrefetch(fetchData);
 
         // Для браузера сразу запускаем запрос
-        if (import.meta.env.SSR === false) {
+        if (!isSSR()) {
             fetchData();
         }
     }

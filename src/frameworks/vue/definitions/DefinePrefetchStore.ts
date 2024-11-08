@@ -1,4 +1,5 @@
 import { inject, onServerPrefetch } from 'vue';
+import { isSSR } from '../../../utils/IsSSR.js';
 
 type AsyncFunctions = Record<string, (...args: any[]) => Promise<any>>;
 type States = Record<string, any>;
@@ -31,7 +32,7 @@ function processAsyncFunctions<T>(functions: T): T {
     Object.entries(functions as AsyncFunctions).forEach(([key, fn]) => {
         isGetPrefetched[key] = false;
         result[key] = async (...args: any[]) => {
-            if (import.meta.env.SSR) {
+            if (isSSR()) {
                 isGetPrefetched[key] = true;
                 onServerPrefetch(() => fn(...args));
             } else if (!isGetPrefetched[key]) {

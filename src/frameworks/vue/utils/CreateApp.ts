@@ -1,5 +1,6 @@
 import { Component, createApp as create, defineComponent, h, Suspense } from 'vue';
 import { Plugin } from './Plugin.js';
+import { isSSR } from '../../../utils/IsSSR.js';
 
 const AppWrapper = (app: Component) => defineComponent({
     components: { App: app },
@@ -17,7 +18,7 @@ export const createApp = (App: Component) => {
     const mount = app.mount;
     // @ts-ignore
     app.mount = () => {
-        if (!import.meta.env.SSR) {
+        if (!isSSR()) {
             return mount("#app");
         };
     }
