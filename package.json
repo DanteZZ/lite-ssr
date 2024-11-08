@@ -1,6 +1,6 @@
 {
   "name": "lite-ssr",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple vite ssr server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,8 +19,8 @@
     "prepublishOnly": "tsc",
     "release": "standard-version",
     "release:pre": "npm run release -- --prerelease",
-    "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
+    "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
     "release:push": "git push --follow-tags origin main"
   },
