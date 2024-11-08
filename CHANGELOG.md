@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.4...v0.1.5) (2024-11-08)
+
+
+### Features
+
+* Добавлена информация о стандартном index.html ([47167c5](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/47167c53b681694634d9f603f537540e4e9a4bf7))
+* Добавлена поддержка vue-router ([4c64100](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/4c64100d513c8abfaa788d3ecd56ade6013fa849))
+
 ### [0.1.4](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.3...v0.1.4) (2024-11-08)
 
 
