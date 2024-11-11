@@ -1,8 +1,6 @@
-import { ServerRenderer } from "./common/ServerRenderer.js";
-import { Framework } from "./types/Framework.js";
-
 import { logInfo, logError } from './utils/Logger.js';
 import { getFrameworkFromArgs, validateFramework } from './utils/Cli.js';
+import { DevServer } from "./common/DevServer.js";
 
 
 const run = async () => {
@@ -19,7 +17,7 @@ const run = async () => {
 
         if (!buildFlag) {
             // Запуск в режиме dev
-            const server = new ServerRenderer(usedFramework);
+            const server = new DevServer(usedFramework);
             await server.initialize();
             server.run();
 

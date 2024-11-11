@@ -1,1 +1,1 @@
-export { VitePlugin as lssrVite } from "./vite/VitePlugin.js";
+export { defineLssrConfig } from "./utils/Conf.js";

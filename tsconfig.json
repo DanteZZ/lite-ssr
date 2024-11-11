@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                   // Поддержка современных возможностей JavaScript
-    "module": "NodeNext",                   // Использовать ESNext модули
-    "moduleResolution": "NodeNext",       // Использование резолвера модулей Node.js
-    "outDir": "dist",                     // Выходная директория
-    "declaration": true,                   // Генерация файлов деклараций (.d.ts)
-    "strict": true,                        // Включение строгого режима
-    "esModuleInterop": true,               // Поддержка импорта CommonJS
-    "skipLibCheck": true,                  // Пропуск проверки библиотек
-    "forceConsistentCasingInFileNames": true, // Принудительное соблюдение регистров имен файлов
-    "sourceMap": true                      // Генерация исходных карт
+    "target": "ESNext",                 
+    "module": "NodeNext",                   
+    "moduleResolution": "NodeNext",      
+    "outDir": "dist",                     
+    "declaration": true,                   
+    "strict": true,                        
+    "esModuleInterop": true,               
+    "skipLibCheck": true,                 
+    "forceConsistentCasingInFileNames": true, 
+    "sourceMap": true                      
   },
-  "include": ["src/**/*"],                 // Включение всех файлов в папке src
-  "exclude": ["node_modules", "dist"]      // Исключение папок node_modules и dist
+  "include": ["src/**/*"],                 
+  "exclude": ["node_modules", "dist"]      
 }

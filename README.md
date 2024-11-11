@@ -49,25 +49,32 @@ export default app // Обязательно экспортируем app
 
 > Экспортировать приложение требуется для того, чтобы lite-ssr мог использовать один entry-файл для рендера приложения на сервере и клиенте, а так же для проброса префетч-данных между сервером и клиентом.
 
-3. Подключение плагина для vite, в `vite.config.ts`
+3. Создание файла конфигурации `/lssr.config.ts`
 
 ``` ts
-import { defineConfig } from 'vite';
-import { lssrVite } from 'lite-ssr';
+// lssr.config.ts
+import { defineLssrConfig } from "lite-ssr";
 
-export default defineConfig({
-    plugins: [
-        lssrVite({
-            entry: "/src/main.ts" // Опционально
-        }),
-    ],
-    server: {
-        port: 3000 // Опционально
+export default defineLssrConfig({
+    entry: "/src/main.ts",
+    head: {
+        title: "LSSR App"
     }
 });
 ```
 
-4. Меняем команды запуска и сборки в `package.json`
+4. Добавляем файл конфигурации в`tsconfig.node.json`
+
+```json
+// tsconfig.node.json
+{
+  ...
+  "include": [..., "lssr.config.ts"]
+}
+
+```
+
+5. Меняем команды запуска и сборки в `package.json`
 
 ```json
 {
@@ -102,25 +109,18 @@ pnpm run build # Не реализовано
 
 ## 🔎 **ИСПОЛЬЗОВАНИЕ**
 
-### Конфигурация vite плагина
+### Конфигурация LSSR
 ```typescript
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import { lssrVite } from "lite-ssr"
+// lssr.config.ts
+import { defineLssrConfig } from "lite-ssr";
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    vue(),
-    lssrVite({
-      entrypoint?: "/src/main.ts", // Опционально, путь к файлу инициализации приложения
-      head?: { // Опционально, конфигурация unhead (https://unhead.unjs.io/usage/composables/use-head#input)
-        title: ""
-      },
-      html?: "" // Опционально, путь к кастомному html файлу (пользуйтесь с умом!)
-    })
-  ],
-})
+export default defineLssrConfig({
+    entry?: "/src/main.ts", // Опционально, путь к файлу инициализации приложения
+    head?: { // Опционально, конфигурация unhead (https://unhead.unjs.io/usage/composables/use-head#input)
+        title: "My LSSR App"
+    },
+    html?: "/index.html" // Опционально, путь к кастомному html файлу (пользуйтесь с умом!)
+});
 ```
 
 ### Создание асинхронных сторов

@@ -23,6 +23,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.21.1
+      mergician:
+        specifier: ^2.0.2
+        version: 2.0.2
       vite:
         specifier: ^5.4.1
         version: 5.4.10(@types/node@20.17.5)(terser@5.36.0)
@@ -1123,6 +1126,10 @@ packages:
 
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
+
+  mergician@2.0.2:
+    resolution: {integrity: sha512-1GDF4LuMcc7UpE7XitfSm822yDtTxLoOVB+9QFnb3o/+zoMAVKxM67UjvmEXOA7FQnz9209K0ZyHAoD+5Ibe4A==}
+    engines: {node: '>=10.0.0'}
 
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
@@ -2793,6 +2800,8 @@ snapshots:
   merge-descriptors@1.0.3: {}
 
   merge-stream@2.0.0: {}
+
+  mergician@2.0.2: {}
 
   methods@1.1.2: {}
 

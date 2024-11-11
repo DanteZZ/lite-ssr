@@ -1,8 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
-import { createServer, ViteDevServer } from 'vite';
-import { type lssrViteConfig } from '../types/ViteConfig.js';
+import { type LssrConfig } from '../types/LssrConfig.js';
 import { RendererFactory } from './RenderFactory.js';
 import { SSRHeadPayload } from '@unhead/ssr';
 import { FinalContext } from '../types/Context.js';
@@ -12,18 +11,13 @@ import { showDevServerMessage } from '../utils/Console.js';
 import { Framework } from '../types/Framework.js';
 import { readFile } from 'fs/promises';
 
-type customizedConfig = {
-    lssr: lssrViteConfig
-}
+export class Server {
 
-export class ServerRenderer {
-
-    private framework: Framework;
-    private app: express.Express;
-    private vite?: ViteDevServer;
-    private config?: lssrViteConfig;
-    private entryPoint: string = "/src/main.ts"
-    private htmlTemplate: string = ""
+    protected framework: Framework;
+    public app: express.Express;
+    protected config: LssrConfig = {};
+    protected entryPoint: string = "/src/main.ts"
+    protected htmlTemplate: string = ""
 
     constructor(framework: Framework) {
         this.app = express();
@@ -31,14 +25,9 @@ export class ServerRenderer {
     }
 
     async initialize() {
-        this.vite = await createServer({
-            root: process.cwd(),
-            server: { middlewareMode: true },
-            appType: 'custom',
-        });
-        this.config = (this.vite.config as unknown as customizedConfig)?.lssr || {}
+        this.config = await this.loadConfig();
         this.entryPoint = this.config?.entry || this.entryPoint;
-        this.htmlTemplate = await readFile(this.config?.html || this.resolve("../../index.html"), "utf-8");
+        this.htmlTemplate = await readFile(this.resolve(this.config?.html || "../../index.html"), "utf-8");
     }
 
 
@@ -50,8 +39,8 @@ export class ServerRenderer {
         const url = req.url;
 
         // Создаем рендерер для выбранного фреймворка
-        const renderFactory = (await this.vite!.ssrLoadModule(this.resolve('./RenderFactory.js')))!.RendererFactory as typeof RendererFactory;
-        const renderer = renderFactory.createRenderer(this.framework, {
+        const rendererFactory = await this.getRendererFactory();
+        const renderer = rendererFactory.createRenderer(this.framework, {
             entryPoint: this.entryPoint,
             headConfig: this.config?.head,
             manifest
@@ -73,8 +62,7 @@ export class ServerRenderer {
     async generateHtml(url: string, appHtml: string, headPayload: SSRHeadPayload, preloadLinks: string, ctx: FinalContext) {
 
         // Загружаем шаблон HTML
-        const template = await this.vite!.transformIndexHtml(url, this.htmlTemplate);
-
+        const template = await this.transformHtml(url, this.htmlTemplate);
         // Сериализируем стейты
         const states = ctx.context;
         const stores = simplifyPrefetchedStores(ctx.contextStores);
@@ -96,9 +84,23 @@ export class ServerRenderer {
         return html;
     }
 
+    async transformHtml(url: string, html: string) {
+        return html;
+    }
+
+    async getRendererFactory() {
+        return RendererFactory;
+    }
+
+    async loadConfig() {
+        const configPath = "../../lssr.config.js";
+        return await import(configPath) as LssrConfig;
+    }
+
     resolve(p: string): string {
-        const dirname = path.dirname(fileURLToPath(import.meta.url));
-        return path.resolve(dirname, p);
+        return p.startsWith("/") ?
+            path.join(process.cwd(), p) :
+            path.resolve(path.dirname(fileURLToPath(import.meta.url)), p);
     }
 
     serializeContext(
@@ -112,11 +114,8 @@ export class ServerRenderer {
     }
 
     run() {
-        this.app.use(this.vite!.middlewares);
         this.app.get('*', (req, res) => this.renderPage(req, res));
-
-        const port = this.vite?.config?.server?.port || 3000;
-
+        const port = 3000;
         this.app.listen(port, () => {
             showDevServerMessage(port);
         });

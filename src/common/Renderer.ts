@@ -1,5 +1,5 @@
 import { SSRHeadPayload } from "@unhead/ssr";
-import { HeadConfig } from "../types/ViteConfig.js";
+import { HeadConfig } from "../types/LssrConfig.js";
 import { Manifest } from "./ManifestUtils.js";
 import { FinalContext } from "../types/Context.js";
 import { getPreloadLinks } from "./PreloadUtils.js";

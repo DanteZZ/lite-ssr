@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-    SSR: boolean; // Добавьте эту строку
+    SSR: boolean;
 }
 
 interface ImportMeta {

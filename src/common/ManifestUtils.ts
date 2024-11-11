@@ -1,4 +1,4 @@
-import { basename } from 'node:path';
+import { basename } from 'path';
 
 export interface Manifest {
     [key: string]: string[];

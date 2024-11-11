@@ -1,6 +1,6 @@
 import { Renderer } from './Renderer.js';
 import { VueRenderer } from '../frameworks/vue/VueRenderer.js';
-import { HeadConfig } from '../types/ViteConfig.js';
+import { HeadConfig } from '../types/LssrConfig.js';
 import { Framework } from '../types/Framework.js';
 
 interface IRendererConfig {
