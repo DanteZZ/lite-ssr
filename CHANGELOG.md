@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.5...v0.1.6) (2024-11-11)
+
+
+### Features
+
+* Добавлен проброс типа конфигурации Lssr ([1e19392](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/1e19392b8a3c1b8faabbf2ddd859e2b81e7f6a98))
+* Переделана конфигурация SSR в отдельный файл ([56bd032](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/56bd032ddc07c36cb30f7eb0d7cd1e6c4c9dbf28))
+
 ### [0.1.5](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.1.4...v0.1.5) (2024-11-08)
 
 
