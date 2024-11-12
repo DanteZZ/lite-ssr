@@ -29,9 +29,10 @@ export class Server {
 
     async initialize() {
         this.config = await this.loadConfig();
-
         this.entryPoint = this.config?.entry || this.entryPoint;
-        this.distPath = this.resolve(this.config?.dist as string);
+        if (!this.entryPoint.startsWith("/")) this.entryPoint = `/${this.entryPoint}`;
+
+        this.distPath = this.resolve(this.config?.dist as string, true);
 
         this.htmlTemplate = await this.loadHtmlTemplate();
 
@@ -112,8 +113,8 @@ export class Server {
     }
 
     async loadConfig() {
-        await compileTsToJs(this.resolve("/lssr.config.ts"), this.resolve("/lssr.config.js"));
-        const path = this.resolve("/lssr.config.js");
+        await compileTsToJs(this.resolve("/lssr.config.ts", true), this.resolve("/lssr.config.js", true));
+        const path = this.resolve("/lssr.config.js", true);
         const config = (await import(this.filePathToUrl(path)))!.default as LssrConfig;
         await rm(path);
         return config;
@@ -130,7 +131,8 @@ export class Server {
         return `file://${path.replace(/\\/g, '/')}`
     }
 
-    resolve(p: string): string {
+    resolve(p: string, root: boolean = false): string {
+        if (root) return path.join(process.cwd(), p);
         return p.startsWith("/") ?
             path.join(process.cwd(), p) :
             path.resolve(path.dirname(fileURLToPath(import.meta.url)), p);
@@ -148,7 +150,7 @@ export class Server {
 
     run() {
         this.app.get('*', (req, res) => this.renderPage(req, res));
-        const port = 3000;
+        const port = this.config.port || 3000;
         this.app.listen(port, () => {
             showDevServerMessage(port);
         });

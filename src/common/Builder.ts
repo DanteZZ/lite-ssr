@@ -44,9 +44,7 @@ export class Builder {
     }
 
     resolve(p: string): string {
-        return p.startsWith("/") ?
-            path.resolve(path.join(process.cwd(), p)) :
-            path.resolve(path.dirname(fileURLToPath(import.meta.url)), p);
+        return path.resolve(path.join(process.cwd(), p))
     }
 
     async buildClientApp() {
@@ -75,6 +73,7 @@ export class Builder {
                     path.dirname(fileURLToPath(import.meta.url)),
                     "../../index.html"
                 );
+            console.log(htmlPath);
             let html = readFileSync(htmlPath, "utf-8");
             const scripts: string[] = [];
             const styles: string[] = [];

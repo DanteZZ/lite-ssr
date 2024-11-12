@@ -14,7 +14,6 @@ const run = async () => {
         const usedFramework = validateFramework(framework);
 
         // Логирование информации о фреймворке
-        logInfo(`Запуск сервера разработки для фреймворка: ${framework}...`);
 
         if (buildFlag) {
             const builder = new Builder(usedFramework);
@@ -22,12 +21,14 @@ const run = async () => {
             await builder.buildClientApp();
             await builder.buildServerApp();
         } else if (serveFlag) {
-            console.log("Serve");
+            logInfo(`Запуск production сервера...`);
             const server = new Server(usedFramework);
             await server.initialize();
             server.run();
         } else {
-            // Запуск в режиме dev
+
+            logInfo(`Запуск сервера разработки для фреймворка: ${framework}...`);
+
             const server = new DevServer(usedFramework);
             await server.initialize();
             server.run();

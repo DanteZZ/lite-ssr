@@ -4,6 +4,7 @@ import { LssrConfig } from "../types/LssrConfig.js";
 const defaultConfig: LssrConfig = {
     dist: "/dist",
     entry: "/src/main.ts",
+    port: 3000,
     head: {},
 };
 

@@ -7,5 +7,6 @@ export interface LssrConfig {
     entry?: string
     head?: HeadConfig
     html?: string
+    port?: number
 }
 

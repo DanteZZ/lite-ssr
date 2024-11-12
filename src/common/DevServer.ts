@@ -21,7 +21,7 @@ export class DevServer extends Server {
             server: { middlewareMode: true },
             appType: 'custom',
         });
-        super.initialize();
+        await super.initialize();
     }
 
 
@@ -41,7 +41,7 @@ export class DevServer extends Server {
 
     async loadHtmlTemplate() {
         const htmlPath = this.config?.html ?
-            this.resolve(this.config?.html) :
+            this.resolve(this.config?.html, true) :
             path.resolve(
                 path.dirname(fileURLToPath(import.meta.url)),
                 "../../index.html"
@@ -53,14 +53,14 @@ export class DevServer extends Server {
     }
 
     async loadConfig() {
-        return (await this.vite!.ssrLoadModule(this.resolve('/lssr.config.ts')))!.default as LssrConfig;
+        return (await this.vite!.ssrLoadModule(this.resolve('/lssr.config.ts', true)))!.default as LssrConfig;
     }
 
     run() {
         this.app.use(this.vite!.middlewares);
         this.app.get('*', (req, res) => this.renderPage(req, res));
 
-        const port = this.vite?.config?.server?.port || 3000;
+        const port = this.config?.port || 3000;
 
         this.app.listen(port, () => {
             showDevServerMessage(port);
