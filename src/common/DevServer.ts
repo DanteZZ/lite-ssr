@@ -3,6 +3,9 @@ import { type LssrConfig } from '../types/LssrConfig.js';
 import { showDevServerMessage } from '../utils/Console.js';
 import { Framework } from '../types/Framework.js';
 import { Server } from './Server.js';
+import { readFile } from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export class DevServer extends Server {
 
@@ -18,8 +21,11 @@ export class DevServer extends Server {
             server: { middlewareMode: true },
             appType: 'custom',
         });
-        await super.initialize();
+        super.initialize();
     }
+
+
+    async initializeMiddlewares() { }
 
     async transformHtml(url: string, html: string) {
         return await this.vite!.transformIndexHtml(url, html);
@@ -27,6 +33,23 @@ export class DevServer extends Server {
 
     async getRendererFactory() {
         return (await this.vite!.ssrLoadModule(this.resolve('./RenderFactory.js')))!.RendererFactory
+    }
+
+    getEntryPoint() {
+        return this.entryPoint;
+    }
+
+    async loadHtmlTemplate() {
+        const htmlPath = this.config?.html ?
+            this.resolve(this.config?.html) :
+            path.resolve(
+                path.dirname(fileURLToPath(import.meta.url)),
+                "../../index.html"
+            );
+        return await readFile(
+            htmlPath,
+            "utf-8"
+        );
     }
 
     async loadConfig() {

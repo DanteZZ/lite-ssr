@@ -69,7 +69,7 @@ export default defineLssrConfig({
 // tsconfig.node.json
 {
   ...
-  "include": [..., "lssr.config.ts"]
+  "include": ["lssr.config.ts"]
 }
 
 ```
@@ -78,20 +78,18 @@ export default defineLssrConfig({
 
 ```json
 {
-    ...
     "scripts": {
         "dev": "lssr --framework=vue",
-        "build": "lssr --framework=vue --build", // Ещё не реализовано
-        ...
+        "build": "lssr --framework=vue --build",
+        "serve": "lssr --framework=vue --serve",
     },
-    ...
 }
 ```
 
 <br />
 
 ### Запуск проекта:
-Запуск в dev режиме:
+Запуск в dev-режиме:
 
 ```bash
 pnpm run dev
@@ -100,7 +98,13 @@ pnpm run dev
 Сборка проекта:
 
 ```bash
-pnpm run build # Не реализовано
+pnpm run build
+```
+
+Запуск проекта в production-режиме:
+
+```bash
+pnpm run serve
 ```
 
 <br />
@@ -119,7 +123,8 @@ export default defineLssrConfig({
     head?: { // Опционально, конфигурация unhead (https://unhead.unjs.io/usage/composables/use-head#input)
         title: "My LSSR App"
     },
-    html?: "/index.html" // Опционально, путь к кастомному html файлу (пользуйтесь с умом!)
+    html?: "/index.html", // Опционально, путь к кастомному html файлу (пользуйтесь с умом!)
+    dist?: "/dist" // Директория для сборки
 });
 ```
 
@@ -165,7 +170,7 @@ export const useData = definePrefetchStore('data', () => {
 ```
 
 **! ВАЖНАЯ ИНФОРМАЦИЯ !**
-> Префетч-сторы, как и сторы Pinia требуют уникального наименования. Это нужно для правильно передачи информации полученной на стороне SSR клиенту !
+> Префетч-сторы, как и сторы Pinia требуют уникального наименования. Это нужно для правильной передачи информации полученной на стороне SSR клиенту !
 
 Пример использования получившегося стора:
 ```html
@@ -253,6 +258,7 @@ lssrVite({
   <head>
     <!--headTags-->
     <!--preload-links-->
+    <!--entry-styles-->
   </head>
   <body<!--bodyAttrs-->>
     <!--bodyTagsOpen-->
@@ -260,7 +266,7 @@ lssrVite({
       <!--app-html-->
     </div>
     <!--initial-state-->
-    <script type="module" src="<!--entry-point-->"></script>
+    <!--entry-scripts-->
     <!--bodyTags-->
   </body>
 </html>

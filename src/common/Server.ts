@@ -9,14 +9,17 @@ import { simplifyPrefetchedStores } from '../frameworks/vue/utils/PrefetchStoreC
 import { serializeObject } from '../utils/Serialize.js';
 import { showDevServerMessage } from '../utils/Console.js';
 import { Framework } from '../types/Framework.js';
-import { readFile } from 'fs/promises';
+import { readFile, rm } from 'fs/promises';
+import { compileTsToJs } from '../utils/TSCompile.js';
 
 export class Server {
 
     protected framework: Framework;
     public app: express.Express;
     protected config: LssrConfig = {};
+
     protected entryPoint: string = "/src/main.ts"
+    protected distPath: string = "/dist"
     protected htmlTemplate: string = ""
 
     constructor(framework: Framework) {
@@ -26,10 +29,21 @@ export class Server {
 
     async initialize() {
         this.config = await this.loadConfig();
+
         this.entryPoint = this.config?.entry || this.entryPoint;
-        this.htmlTemplate = await readFile(this.resolve(this.config?.html || "../../index.html"), "utf-8");
+        this.distPath = this.resolve(this.config?.dist as string);
+
+        this.htmlTemplate = await this.loadHtmlTemplate();
+
+        await this.initializeMiddlewares();
     }
 
+    async initializeMiddlewares() {
+        const compression = (await import('compression')).default
+        const sirv = (await import('sirv')).default
+        this.app.use(compression())
+        this.app.use("/", sirv(path.join(this.distPath, "/client"), { extensions: [] })) //TODO: продумать по поводу изменения базовой директории проекта
+    }
 
     // Метод для рендеринга страницы
     async renderPage(req: express.Request, res: express.Response) {
@@ -41,7 +55,7 @@ export class Server {
         // Создаем рендерер для выбранного фреймворка
         const rendererFactory = await this.getRendererFactory();
         const renderer = rendererFactory.createRenderer(this.framework, {
-            entryPoint: this.entryPoint,
+            entryPoint: this.getEntryPoint(),
             headConfig: this.config?.head,
             manifest
         });
@@ -76,7 +90,8 @@ export class Server {
                 `<script>window.__INITIAL_STATE__="${initialState}"</script>`
             )
             .replace('<!--app-html-->', appHtml)
-            .replace('<!--entry-point-->', this.entryPoint);
+            .replace('<!--entry-styles-->', '')
+            .replace('<!--entry-scripts-->', `<script type="module" src="${this.entryPoint}"></script>`);
         Object.entries(headPayload).forEach(([key, value]) => {
             html = html.replace(`<!--${key}-->`, value as string)
         })
@@ -92,9 +107,27 @@ export class Server {
         return RendererFactory;
     }
 
+    getEntryPoint() {
+        return this.filePathToUrl(path.join(this.distPath, "/ssr/app.js"));
+    }
+
     async loadConfig() {
-        const configPath = "../../lssr.config.js";
-        return await import(configPath) as LssrConfig;
+        await compileTsToJs(this.resolve("/lssr.config.ts"), this.resolve("/lssr.config.js"));
+        const path = this.resolve("/lssr.config.js");
+        const config = (await import(this.filePathToUrl(path)))!.default as LssrConfig;
+        await rm(path);
+        return config;
+    }
+
+    async loadHtmlTemplate() {
+        return await readFile(
+            path.join(this.distPath, "/index.html"),
+            "utf-8"
+        );
+    }
+
+    filePathToUrl(path: string) {
+        return `file://${path.replace(/\\/g, '/')}`
     }
 
     resolve(p: string): string {

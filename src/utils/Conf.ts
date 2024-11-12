@@ -2,6 +2,7 @@ import { mergician } from "mergician";
 import { LssrConfig } from "../types/LssrConfig.js";
 
 const defaultConfig: LssrConfig = {
+    dist: "/dist",
     entry: "/src/main.ts",
     head: {},
 };

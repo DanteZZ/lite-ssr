@@ -4,12 +4,13 @@ export const getFrameworkFromArgs = () => {
     const args = process.argv.slice(2);
     const frameworkArg = args.find(arg => arg.startsWith('--framework='));
     const buildFlag = args.includes('--build');
+    const serveFlag = args.includes('--serve');
     let framework = null;
     if (frameworkArg) {
         framework = frameworkArg.split('=')[1].toLowerCase();
     }
 
-    return { framework, buildFlag };
+    return { framework, buildFlag, serveFlag };
 };
 
 export const validateFramework = (framework: string | null): Framework => {
