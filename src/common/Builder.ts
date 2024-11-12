@@ -89,8 +89,8 @@ export class Builder {
                 };
             });
 
-            html = html.replace('<!--entry-scripts-->', scripts.map(script => `<script src="${script}"></script>`).join("\n") || "");
-            html = html.replace('<!--entry-styles-->', styles.map(style => `<link href="${style}" rel="stylesheet" />`).join("\n") || "");
+            html = html.replace('<!--entry-scripts-->', scripts.map(script => `<script type="module" src="/${script}"></script>`).join("\n") || "");
+            html = html.replace('<!--entry-styles-->', styles.map(style => `<link href="/${style}" rel="stylesheet" />`).join("\n") || "");
 
             writeFileSync(path.join(this.distPath, "/index.html"), html, "utf-8");
 
