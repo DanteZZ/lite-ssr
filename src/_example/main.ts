@@ -1,4 +1,4 @@
-import { defineComponent, h, ref } from 'vue';
+import { defineComponent, h, ref, watch } from 'vue';
 import { createApp } from '../frameworks/vue/export.js'
 import { definePrefetchStore } from '../frameworks/vue/export.js';
 
@@ -21,6 +21,7 @@ const App = defineComponent({
 
         // Выполняем запрос
         const { fetchTodo, todo } = useTodoStore();
+
         fetchTodo(1);
 
         const timer = ref(0);
@@ -28,6 +29,8 @@ const App = defineComponent({
             timer.value++;
             if (timer.value > 4) timer.value = 0;
         }, 500);
+
+
         return () => h('pre', JSON.stringify(todo.value, null, '\t'))
     },
 });

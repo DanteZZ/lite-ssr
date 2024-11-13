@@ -1,9 +1,10 @@
 import { inject, onServerPrefetch } from 'vue';
 import { isSSR } from '../../../utils/IsSSR.js';
+import { enrichPrefetchedStoreStates } from '../utils/PrefetchStoreConverter.js';
 
-type AsyncFunctions = Record<string, (...args: any[]) => Promise<any>>;
-type States = Record<string, any>;
-type Store = {
+export type AsyncFunctions = Record<string, (...args: any[]) => Promise<any>>;
+export type States = Record<string, any>;
+export type Store = {
     __initialized: boolean;
     [key: string]: any;
 };
@@ -73,7 +74,9 @@ export function definePrefetchStore<T extends () => any>(name: string, fn: T): (
             if (needInitialize) {
                 stores[name] = {
                     ...stores[name],
-                    ...processAsyncFunctions(asyncFunctions)
+                    ...enrichPrefetchedStoreStates(states, stores[name]),
+                    ...processAsyncFunctions(asyncFunctions),
+                    __initialized: true,
                 }
             } else {
                 stores[name] = {

@@ -1,6 +1,5 @@
 import { App } from 'vue';
 import { deserializeObject } from '../../../utils/Serialize.js';
-import { enrichPrefetchedStores } from './PrefetchStoreConverter.js';
 import { isSSR } from '../../../utils/IsSSR.js';
 
 declare global {
@@ -15,7 +14,7 @@ export const Plugin = {
         if (!isSSR()) {
             const initial = deserializeObject(window.__INITIAL_STATE__);
             app.provide('context', initial.states);
-            app.provide('contextStores', enrichPrefetchedStores(initial.stores));
+            app.provide('contextStores', initial.stores);
         }
     },
 };
