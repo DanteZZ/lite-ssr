@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.2...v0.2.3) (2024-11-13)
+
+
+### Bug Fixes
+
+* Исправлена перезапись реактивных стейтов в сторах ([99a9fe0](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/99a9fe07122e20b6da1d5f6e1abd62136cc2952e))
+
 ### [0.2.2](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.1...v0.2.2) (2024-11-12)
 
 
