@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.3...v0.2.4) (2024-11-14)
+
+
+### Bug Fixes
+
+* Исправлена установка роута на стороне SSR, исправлен unhead на стороне ssr ([96d6285](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/96d6285b620f0b3ee22866d142d626bbc8bc5021))
+
 ### [0.2.3](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.2...v0.2.3) (2024-11-13)
 
 
