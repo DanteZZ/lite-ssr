@@ -11,10 +11,20 @@ export class VueRenderer extends Renderer {
     private head: null | Unhead = null;
 
     async renderApp(url: string): Promise<string> {
-        const { default: app } = await import(
+        const { default: importedApp } = await import(
             /* @vite-ignore */
             `${this.entryPoint}?${Date.now()}`
-        ) as { default: App, routes: any };
+        ) as { default: App | Function };
+
+        let app: App;
+
+        if (importedApp instanceof Function && importedApp.constructor.name === "AsyncFunction") {
+            app = await importedApp();
+        } else if (importedApp instanceof Function) {
+            app = importedApp();
+        } else {
+            app = importedApp;
+        }
 
         app.provide('context', this.context);
         app.provide('contextStores', this.contextStores);
