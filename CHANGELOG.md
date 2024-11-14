@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.4...v0.2.5) (2024-11-14)
+
+
+### Features
+
+* поддержка асинхронной регистрации приложения ([7b197ed](https://gitlab.zebrains.team/frontend/modules/lite-ssr/commit/7b197ed0d57aa34e8eae3de3c454dff920381d0b))
+
 ### [0.2.4](https://gitlab.zebrains.team/frontend/modules/lite-ssr/compare/v0.2.3...v0.2.4) (2024-11-14)
 
 
