@@ -14,6 +14,11 @@ const AppWrapper = (app: Component) => defineComponent({
 
 export const createApp = (App: Component) => {
     const app = create(AppWrapper(App));
+    const originalUse = app.use;
+    app.use = (...args: Parameters<typeof originalUse>) => {
+        // Здесь можно будет добавить необычные обработчики, к примеру отменять подключение плагинов, если они подключается на стороне сервера
+        return originalUse(...args);
+    }
     app.use(Plugin);
     const mount = app.mount;
     // @ts-ignore
