@@ -1,6 +1,6 @@
 {
   "name": "lite-ssr",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "Simple vite ssr server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,38 +17,30 @@
     "build:example": "tsc && node ./dist/bin.js --build",
     "serve:example": "tsc && node ./dist/bin.js --serve ",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "tsc",
-    "release": "standard-version",
-    "release:pre": "npm run release -- --prerelease",
-    "release:patch": "standard-version --release-as patch",
-    "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major",
-    "release:push": "git push --follow-tags origin main"
+    "prepublishOnly": "tsc"
   },
-  "author": "Zebrains Dev",
-  "license": "MIT",
+  "author": "me@dantezz.ru",
+  "license": "Apache-2.0",
   "files": [
-    "README.md",
-    "src",
     "dist",
-    "index.html"
+    "index.html",
+    "README.md"
   ],
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.zebrains.team/frontend/modules/lite-ssr.git"
+    "url": "https://github.com/DanteZZ/lite-ssr.git"
   },
   "bugs": {
-    "url": "https://gitlab.zebrains.team/frontend/modules/lite-ssr/-/issues"
+    "url": "https://github.com/DanteZZ/lite-ssr/issues"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.19",
     "fix-esm-import-path": "^1.10.1",
     "rollup": "^4.11.0",
-    "standard-version": "^9.5.0",
     "ts-loader": "^9.5.1"
   },
   "peerDependencies": {

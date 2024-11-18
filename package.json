@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "version": "0.2.5",
+  "license": "Apache-2.0",
+  "author": "me@dantezz.ru",
   "scripts": {
     "build": "pnpm build:core && pnpm build:vue && pnpm build:lssr",
     "start": "pnpm --filter lite-ssr start:example",
