@@ -6,10 +6,12 @@
   "author": "me@dantezz.ru",
   "scripts": {
     "build": "pnpm build:core && pnpm build:vue && pnpm build:lssr",
-    "start": "pnpm --filter lite-ssr start:example",
     "build:core": "pnpm --filter core build",
     "build:lssr": "pnpm --filter lite-ssr build",
-    "build:vue": "pnpm --filter vue build"
+    "build:vue": "pnpm --filter vue build",
+    "example": "pnpm --filter lite-ssr start:example",
+    "example:build": "pnpm --filter lite-ssr build:example",
+    "example:serve": "pnpm --filter lite-ssr serve:example"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9"

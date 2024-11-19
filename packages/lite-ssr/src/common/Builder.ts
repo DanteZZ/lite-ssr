@@ -4,6 +4,7 @@ import { build } from "vite";
 import { logError, logInfo, logSuccess } from "@lite-ssr/core";
 import { fileURLToPath } from "url";
 import { readFileSync, rmSync, writeFileSync } from "fs";
+import { readFile } from "fs/promises";
 
 export class Builder {
     config: LssrConfig;
@@ -20,6 +21,25 @@ export class Builder {
 
     resolve(path: string) {
         return resolve(path);
+    }
+
+    async buildHtml() {
+        let htmlPath: string;
+        if (this.config?.html) {
+            htmlPath = this.resolve(this.config?.html);
+        } else {
+            const rendererTemplate = (await (this.config.renderer as any).getHtmlTemplate()) as string | null;
+            if (rendererTemplate) return rendererTemplate;
+            htmlPath = path.resolve(
+                path.dirname(fileURLToPath(import.meta.url)),
+                "../../index.html"
+            );
+        }
+        return await readFile(
+            htmlPath,
+            "utf-8"
+        );
+
     }
 
     async buildClientApp() {
@@ -42,20 +62,13 @@ export class Builder {
             });
 
             logInfo("Сборка index.html файла...")
-            let htmlPath = this.config?.html ?
-                this.resolve(this.config?.html) :
-                path.resolve(
-                    path.dirname(fileURLToPath(import.meta.url)),
-                    "../../index.html"
-                );
-            console.log(htmlPath);
-            let html = readFileSync(htmlPath, "utf-8");
+            let html = await this.buildHtml();
+
             const scripts: string[] = [];
             const styles: string[] = [];
 
             (result as any).output.forEach((resFile: any) => {
                 const file: string = resFile.fileName;
-                console.log(file);
                 if (file.endsWith(".js")) {
                     scripts.push(file)
                 } else if (file.endsWith(".css")) {

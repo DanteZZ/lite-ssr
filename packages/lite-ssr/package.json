@@ -1,6 +1,6 @@
 {
   "name": "lite-ssr",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple vite ssr server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
