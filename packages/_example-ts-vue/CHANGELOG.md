@@ -1,5 +1,12 @@
 # example-ts-vue
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @lite-ssr/vue-unhead@1.0.1
+
 ## 0.0.1
 
 ### Patch Changes

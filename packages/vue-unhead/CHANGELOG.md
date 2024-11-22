@@ -1,5 +1,11 @@
 # @lite-ssr/vue
 
+## 1.0.1
+
+### Patch Changes
+
+- Fix dependencies fir schema and ssr
+
 ## 1.0.0
 
 ### Minor Changes

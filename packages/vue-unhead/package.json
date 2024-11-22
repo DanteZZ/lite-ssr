@@ -1,6 +1,6 @@
 {
   "name": "@lite-ssr/vue-unhead",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "LiteSSR Proxy Plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,9 @@
   "devDependencies": {
     "@types/node": "^20.11.19",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
     "@unhead/schema": "^1.11.1",
     "@unhead/ssr": "^1.11.1"
   },
