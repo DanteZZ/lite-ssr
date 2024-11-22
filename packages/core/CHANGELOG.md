@@ -1,5 +1,16 @@
 # @lite-ssr/core
 
+## 0.4.0
+
+### Minor Changes
+
+- - Added plugin system for ssr
+  - Added plugins system for renderers
+  - Added hooks system for ssr
+  - Added hooks system for renderers
+  - Created plugin "@lite-ssr/proxy"
+  - Created plugin "@lite-ssr/vue-unhead"
+
 ## 0.3.1
 
 ### Patch Changes
