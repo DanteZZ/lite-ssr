@@ -1,6 +1,7 @@
 import { definePlugin } from "@lite-ssr/vue/renderer";
 import { renderSSRHead } from '@unhead/ssr';
-import { createHead, Head } from "@unhead/vue";
+import { createHead } from "@unhead/vue";
+import { Head } from "@unhead/schema";
 
 export const vueUnheadPlugin = definePlugin<Head>('vue-unhead', ({ defineHook }, config) => {
     defineHook('init', ({ $app }) => {
