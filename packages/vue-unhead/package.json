@@ -1,0 +1,36 @@
+{
+  "name": "@lite-ssr/vue-unhead",
+  "version": "0.1.0",
+  "description": "LiteSSR Proxy Plugin",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "tsc"
+  },
+  "author": "me@dantezz.ru",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "@unhead/schema": "^1.11.1",
+    "@unhead/ssr": "^1.11.1"
+  },
+  "peerDependencies": {
+    "@lite-ssr/vue": "workspace:^",
+    "@unhead/vue": "^1.10.1"
+  }
+}

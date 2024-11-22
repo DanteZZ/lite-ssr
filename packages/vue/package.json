@@ -1,14 +1,14 @@
 {
-  "name": "@lite-ssr/core",
-  "version": "0.3.1",
-  "description": "lite-ssr core",
+  "name": "@lite-ssr/vue",
+  "version": "0.3.2",
+  "description": "LiteSSR Vue module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./shared": "./dist/shared.js",
-    "./hooks": "./dist/utils/HookSystem.js"
+    "./renderer": "./dist/renderer.js",
+    "./hooks": "./dist/hooks.js"
   },
   "scripts": {
     "build": "tsc",
@@ -16,7 +16,7 @@
     "prepublishOnly": "tsc"
   },
   "author": "me@dantezz.ru",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "files": [
     "README.md",
     "dist"
@@ -26,21 +26,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/DanteZZ/lite-ssr.git"
+    "url": "https://gitlab.zebrains.team/frontend/modules/lite-ssr@vue.git"
   },
   "bugs": {
-    "url": "https://github.com/DanteZZ/lite-ssr/issues"
+    "url": "https://gitlab.zebrains.team/frontend/modules/lite-ssr@vue/-/issues"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "@types/node": "^20.11.19",
-    "ts-loader": "^9.5.1"
-  },
-  "peerDependencies": {
+    "fix-esm-import-path": "^1.10.1",
+    "rollup": "^4.11.0",
+    "ts-loader": "^9.5.1",
     "typescript": "^5.3.3"
   },
+  "peerDependencies": {
+    "vue": "^3.5.1"
+  },
   "dependencies": {
-    "@types/compression": "^1.7.5",
-    "chalk": "^5.3.0",
-    "mergician": "^2.0.2"
+    "@lite-ssr/core": "workspace:*"
   }
 }

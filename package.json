@@ -5,13 +5,15 @@
   "license": "Apache-2.0",
   "author": "me@dantezz.ru",
   "scripts": {
-    "build": "pnpm build:core && pnpm build:vue && pnpm build:lssr",
+    "build": "pnpm build:core && pnpm build:vue && pnpm build:lssr && pnpm build:proxy && pnpm build:vue-unhead",
     "build:core": "pnpm --filter core build",
     "build:lssr": "pnpm --filter lite-ssr build",
     "build:vue": "pnpm --filter vue build",
-    "example": "pnpm --filter lite-ssr start:example",
-    "example:build": "pnpm --filter lite-ssr build:example",
-    "example:serve": "pnpm --filter lite-ssr serve:example"
+    "build:proxy": "pnpm --filter proxy build",
+    "build:vue-unhead": "pnpm --filter vue-unhead build",
+    "example:dev": "pnpm --filter example-ts-vue dev",
+    "example:build": "pnpm --filter example-ts-vue build",
+    "example:serve": "pnpm --filter example-ts-vue serve"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9"

@@ -1,13 +1,16 @@
-import { serializeObject } from "@lite-ssr/core/shared";
+import { PluginSystem, serializeObject } from "@lite-ssr/core/shared";
 import { Manifest } from "./ManifestUtils.js";
 import { getPreloadLinks } from "./PreloadUtils.js";
 import { LssrConfig } from "../types/LssrConfig.js";
+import { defineRendererPlugin } from "../shared/RendererPlugin.js";
 
 export abstract class Renderer {
     protected entryPoint: string;
     protected manifest: Manifest | null = null;
     protected load: Function;
     protected config: LssrConfig;
+    protected pluginSystem = new PluginSystem<unknown>(this);
+    public html: string = "";
 
     constructor(
         entryPoint: string,
@@ -19,6 +22,19 @@ export abstract class Renderer {
         this.config = config;
         this.manifest = manifest;
         this.load = load;
+    }
+
+    static definePlugin<Config>(...args: Parameters<typeof defineRendererPlugin>) {
+        return defineRendererPlugin<unknown, Config>(...args)
+    }
+
+    async initializePlugins() {
+        if (this.config.rendererPlugins && this.config.rendererPlugins.length > 0) {
+            for (const plugin of this.config.rendererPlugins) {
+                this.pluginSystem.registerPlugin(plugin, plugin.config)
+            }
+        }
+        await this.pluginSystem.initializePlugins();
     }
 
     // Методы
@@ -34,7 +50,8 @@ export abstract class Renderer {
         t = this.fillEntryStyles(t);
         t = this.fillEntryScripts(t);
 
-        return t;
+        this.html = t;
+        return this.html;
     }
     static async getHtmlTemplate(): Promise<string | null> {
         return null;

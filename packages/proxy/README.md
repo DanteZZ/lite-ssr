@@ -1,0 +1,1 @@
+# LiteSSR proxy plugin

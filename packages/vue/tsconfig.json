@@ -2,16 +2,19 @@
   "compilerOptions": {
     "target": "ESNext",                 
     "module": "NodeNext",                   
-    "moduleResolution": "NodeNext",
-    "rootDir": "./src",
-    "outDir": "./dist",                     
+    "moduleResolution": "NodeNext",      
+    "outDir": "dist",                     
     "declaration": true,                   
     "strict": true,                        
     "esModuleInterop": true,               
     "skipLibCheck": true,                 
     "forceConsistentCasingInFileNames": true, 
-    "sourceMap": true,              
+    "sourceMap": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"   // Убедитесь, что путь до ваших типов правильный
+    ]
   },
-  "include": ["src/**/*", "src/global.d.ts"],                 
+  "include": ["src/**/*", "node_modules/@lite-ssr/vue/types/hooks.d.ts" ],                 
   "exclude": ["node_modules", "dist"]      
 }
