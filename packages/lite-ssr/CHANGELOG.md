@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.2
+
+### Patch Changes
+
+- Error handling
+- Updated dependencies
+  - @lite-ssr/core@0.4.1
+
 ## 0.4.1
 
 ### Patch Changes

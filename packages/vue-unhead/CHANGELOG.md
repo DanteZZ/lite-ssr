@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 1.0.2
+
+### Patch Changes
+
+- Error handling
+- Updated dependencies
+  - @lite-ssr/vue@0.4.1
+
 ## 1.0.1
 
 ### Patch Changes

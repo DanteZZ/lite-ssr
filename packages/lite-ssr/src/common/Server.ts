@@ -1,4 +1,4 @@
-import { type LssrConfig, Renderer, logError, filePathToUrl } from '@lite-ssr/core';
+import { type LssrConfig, Renderer, logError, filePathToUrl, formatErrorToHtml } from '@lite-ssr/core';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express, { Request, Response } from 'express';
@@ -79,16 +79,21 @@ export class Server {
 
         // Создаем рендерер для выбранного фреймворка
         if (this.renderer) {
-            await dispatchServerHook('request', this.hookRequestData(url, req, res, this.renderer));
-            await dispatchServerHook('renderStart', this.hookRequestData(url, req, res, this.renderer));
-            // Генерируем конечный HTML
-            const template = await this.transformHtml(url, this.htmlTemplate);
-            const htmlResult = await this.renderer.generateHtml(url, template);
-            await dispatchServerHook('renderEnd', this.hookRequestData(url, req, res, this.renderer));
-            // Отправляем результат клиенту
-            await dispatchServerHook('beforeResponse', this.hookRequestData(url, req, res, this.renderer));
-            res.status(200).set({ 'Content-Type': 'text/html' }).end(htmlResult);
-            await dispatchServerHook('afterResponse', this.hookRequestData(url, req, res, this.renderer));
+            try {
+                await dispatchServerHook('request', this.hookRequestData(url, req, res, this.renderer));
+                await dispatchServerHook('renderStart', this.hookRequestData(url, req, res, this.renderer));
+                // Генерируем конечный HTML
+                const template = await this.transformHtml(url, this.htmlTemplate);
+                const htmlResult = await this.renderer.generateHtml(url, template);
+
+                await dispatchServerHook('renderEnd', this.hookRequestData(url, req, res, this.renderer));
+                // Отправляем результат клиенту
+                await dispatchServerHook('beforeResponse', this.hookRequestData(url, req, res, this.renderer));
+                res.status(200).set({ 'Content-Type': 'text/html' }).end(htmlResult);
+                await dispatchServerHook('afterResponse', this.hookRequestData(url, req, res, this.renderer));
+            } catch (e) {
+                res.status(500).set({ 'Content-Type': 'text/html' }).end(formatErrorToHtml(e as Error));
+            }
         } else {
             throw new Error("Не удалось инициализировать рендерер");
         }
@@ -151,6 +156,7 @@ export class Server {
     public run() {
         this.app.get('*', (req, res) => this.renderPage(req, res));
         const port = this.config.port || 3000;
+        import.meta.env.port = port;
         this.app.listen(port, () => {
             showDevServerMessage(port);
         });

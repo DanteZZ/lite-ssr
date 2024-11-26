@@ -3,6 +3,7 @@ import { Manifest } from "./ManifestUtils.js";
 import { getPreloadLinks } from "./PreloadUtils.js";
 import { LssrConfig } from "../types/LssrConfig.js";
 import { defineRendererPlugin } from "../shared/RendererPlugin.js";
+import { formatErrorToHtml } from "../utils/ErrorSerializer.js";
 
 export abstract class Renderer {
     protected entryPoint: string;
@@ -49,7 +50,6 @@ export abstract class Renderer {
         t = this.fillInitialState(t);
         t = this.fillEntryStyles(t);
         t = this.fillEntryScripts(t);
-
         this.html = t;
         return this.html;
     }

@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 0.4.1
+
+### Patch Changes
+
+- Error handling
+- Updated dependencies
+  - @lite-ssr/core@0.4.1
+
 ## 0.4.0
 
 ### Minor Changes

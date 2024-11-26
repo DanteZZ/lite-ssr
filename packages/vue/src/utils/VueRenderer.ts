@@ -26,6 +26,22 @@ export class VueRenderer extends Renderer {
         return defineRendererPlugin<VueRenderer, Config>(...args)
     }
 
+    errorHandler(err: unknown, instance: any, info: string) {
+        console.error('Vue Error:', {
+            error: err,
+            instance,
+            info,
+        });
+
+        // TODO: Сделать нормальный вывод ошибок
+        if (err instanceof Error) {
+            console.error(`Произошла ошибка: ${err.message}`);
+            console.error(err.stack);
+        } else {
+            console.error('Произошла неизвестная ошибка');
+        }
+    }
+
     async renderApp(url: string): Promise<string> {
         const { default: importedApp } = await this.load(
             /* @vite-ignore */
@@ -39,6 +55,9 @@ export class VueRenderer extends Renderer {
         } else {
             this.app = importedApp;
         }
+
+        this.app!.config.errorHandler = this.errorHandler;
+
         dispatchHook('beforeProvideContext', this.hookData(url))
         this.app!.provide('context', this.context);
         this.app!.provide('contextStores', this.contextStores);
