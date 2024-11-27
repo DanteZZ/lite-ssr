@@ -1,11 +1,12 @@
 import { inject, onServerPrefetch } from 'vue';
-import { enrichPrefetchedStoreStates } from '../utils/PrefetchStoreConverter.js';
+import { enrichPrefetchedFuncCalls, enrichPrefetchedStoreStates } from '../utils/PrefetchStoreConverter.js';
 import { isSSR } from '@lite-ssr/core/shared';
 
 export type AsyncFunctions = Record<string, (...args: any[]) => Promise<any>>;
 export type States = Record<string, any>;
 export type Store = {
-    __initialized: boolean;
+    __filled: boolean;
+    __calls: Record<string, number>
     [key: string]: any;
 };
 
@@ -26,17 +27,18 @@ function splitStoreData(obj: Record<string, any>): [AsyncFunctions, States] {
 }
 
 // Обработка асинхронных функций с кэшированием для SSR
-function processAsyncFunctions<T>(functions: T): T {
+function processAsyncFunctions<T>(functions: T, store: Store): T {
     const result = {} as Record<string, Function>;
     const isGetPrefetched: Record<string, boolean> = {};
-
     Object.entries(functions as AsyncFunctions).forEach(([key, fn]) => {
         isGetPrefetched[key] = false;
         result[key] = async (...args: any[]) => {
             if (isSSR()) {
+                console.log(store);
+                store.__calls[key] += 1;
                 isGetPrefetched[key] = true;
                 onServerPrefetch(() => fn(...args));
-            } else if (!isGetPrefetched[key]) {
+            } else if (!isGetPrefetched[key] && store.__calls?.[key] > 0) {
                 isGetPrefetched[key] = true;
             } else {
                 await fn(...args);
@@ -62,26 +64,33 @@ function processStates<T>(ctx: Record<string, any>, states: T): T {
 export function definePrefetchStore<T extends () => any>(name: string, fn: T): () => ReturnType<T> {
     return () => {
         const stores = inject<Record<string, any>>('contextStores', {});
-        if (!stores[name] || !stores?.[name]?.__initialized) {
+        if (!stores[name] || !stores?.[name]?.__filled) {
 
-            const needInitialize = (stores[name] && !stores?.[name]?.__initialized);
+            const needFill = (stores[name] && !stores?.[name]?.__filled);
 
-            if (!stores[name]) stores[name] = { __initialized: true };
+            if (!stores[name]) stores[name] = { __filled: true };
 
             const originalStore = fn();
             const [asyncFunctions, states] = splitStoreData(originalStore);
 
-            if (needInitialize) {
+            const asyncFunctionCalls = Object.fromEntries(Object.entries(asyncFunctions).map(([fName]) => [fName, 0]))
+
+            stores[name] = {
+                ...stores[name],
+                __calls: needFill ? enrichPrefetchedFuncCalls(asyncFunctionCalls, stores[name]) : asyncFunctionCalls
+            }
+
+            if (needFill) {
                 stores[name] = {
                     ...stores[name],
                     ...enrichPrefetchedStoreStates(states, stores[name]),
-                    ...processAsyncFunctions(asyncFunctions),
-                    __initialized: true,
+                    ...processAsyncFunctions(asyncFunctions, stores[name]),
+                    __filled: true,
                 }
             } else {
                 stores[name] = {
                     ...stores[name],
-                    ...processAsyncFunctions(asyncFunctions),
+                    ...processAsyncFunctions(asyncFunctions, stores[name]),
                     ...processStates(stores[name], states)
                 }
             }

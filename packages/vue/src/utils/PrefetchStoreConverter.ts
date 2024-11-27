@@ -21,7 +21,7 @@ export function simplifyPrefetchedStores<T>(ctx: T): T {
             data[storeName][key] = processValue(value);
         });
 
-        data[storeName].__initialized = false;
+        data[storeName].__filled = false;
     });
 
     return data as T;
@@ -29,6 +29,7 @@ export function simplifyPrefetchedStores<T>(ctx: T): T {
 
 
 // Обогащение данных предварительной загрузки
+
 export function enrichPrefetchedStoreStates(states: States, prefetchedStore: Store) {
     // Пройдем по всем ключам стейта
     for (const key in states) {
@@ -100,4 +101,15 @@ export function enrichPrefetchedStoreStates(states: States, prefetchedStore: Sto
         }
     }
     return states;
+}
+
+// Обогащение количеств вызовов при загрузке
+
+export function enrichPrefetchedFuncCalls(calls: Record<string, number>, prefetchedStore: Store) {
+    for (const key in calls) {
+        if (prefetchedStore.__calls.hasOwnProperty(key)) {
+            calls[key] = prefetchedStore.__calls[key];
+        };
+    };
+    return calls;
 }

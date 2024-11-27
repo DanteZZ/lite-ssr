@@ -4,7 +4,6 @@ import { useTodo } from '../composables/useTodo';
 
 const { todo, fetchTodo } = useTodo();
 const todoId = ref(10);
-fetchTodo(todoId.value);
 </script>
 
 <template>
