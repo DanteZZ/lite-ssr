@@ -34,7 +34,6 @@ function processAsyncFunctions<T>(functions: T, store: Store): T {
         isGetPrefetched[key] = false;
         result[key] = async (...args: any[]) => {
             if (isSSR()) {
-                console.log(store);
                 store.__calls[key] += 1;
                 isGetPrefetched[key] = true;
                 onServerPrefetch(() => fn(...args));

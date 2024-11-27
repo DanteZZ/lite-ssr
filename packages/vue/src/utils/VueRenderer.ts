@@ -43,6 +43,9 @@ export class VueRenderer extends Renderer {
     }
 
     async renderApp(url: string): Promise<string> {
+        this.context = { modules: [] };
+        this.contextStores = {};
+
         const { default: importedApp } = await this.load(
             /* @vite-ignore */
             `${this.entryPoint}?${Date.now()}`

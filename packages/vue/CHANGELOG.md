@@ -1,5 +1,11 @@
 # @lite-ssr/vue
 
+## 0.4.2
+
+### Patch Changes
+
+- fix: Ignoring first call unused on ssr prefetch functions
+
 ## 0.4.1
 
 ### Patch Changes
