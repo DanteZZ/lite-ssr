@@ -1,19 +1,21 @@
 {
   "name": "example-ts-vue",
   "private": true,
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "scripts": {
     "dev": "lssr",
-    "build": "lssr build",
-    "serve": "lssr serve"
+    "build": "lssr --build",
+    "serve": "lssr --serve"
   },
   "dependencies": {
-    "vue": "^3.5.12",
-    "lite-ssr": "workspace:*",
-    "@lite-ssr/vue": "workspace:*",
     "@lite-ssr/proxy": "workspace:*",
-    "@lite-ssr/vue-unhead": "workspace:*"
+    "@lite-ssr/vue": "workspace:*",
+    "@lite-ssr/vue-unhead": "workspace:*",
+    "axios": "^1.7.8",
+    "lite-ssr": "workspace:*",
+    "ofetch": "^1.4.1",
+    "vue": "^3.5.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",

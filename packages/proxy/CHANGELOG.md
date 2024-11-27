@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 1.0.3
+
+### Patch Changes
+
+- Add support for proxy SSR with axios and ofetch
+- Updated dependencies
+  - lite-ssr@0.4.3
+
 ## 1.0.2
 
 ### Patch Changes

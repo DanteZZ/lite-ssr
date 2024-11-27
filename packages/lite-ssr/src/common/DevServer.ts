@@ -15,6 +15,7 @@ export class DevServer extends Server {
             server: { middlewareMode: true },
             appType: 'custom',
         });
+        this.vite.config.env.LSSR_PORT = this.config.port;
         await super.initialize();
     }
 

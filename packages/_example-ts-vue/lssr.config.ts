@@ -5,6 +5,7 @@ import vueUnheadPlugin from "@lite-ssr/vue-unhead";
 
 export default defineLssrConfig({
     renderer: VueRenderer,
+    port: 2000,
     plugins: [
         proxyPlugin({
             '/api': {

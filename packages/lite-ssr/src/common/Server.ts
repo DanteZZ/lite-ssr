@@ -22,6 +22,7 @@ export class Server {
     constructor(config: LssrConfig) {
         this.app = express();
         this.config = config;
+        process.env.LSSR_PORT = this.config.port?.toString();
     }
 
     protected registerPlugins() {
@@ -156,7 +157,6 @@ export class Server {
     public run() {
         this.app.get('*', (req, res) => this.renderPage(req, res));
         const port = this.config.port || 3000;
-        import.meta.env.port = port;
         this.app.listen(port, () => {
             showDevServerMessage(port);
         });

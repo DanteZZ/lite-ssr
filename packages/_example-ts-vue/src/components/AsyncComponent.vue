@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useTodo } from '../composables/useTodo';
 
 const { todo, fetchTodo } = useTodo();
-
-await fetchTodo(1);
+const todoId = ref(10);
+fetchTodo(todoId.value);
 </script>
 
 <template>
     <pre>{{ JSON.stringify(todo, null, '\t') }}</pre>
+    <button @click="() => { todoId++; fetchTodo(todoId) }">Update++</button>
 </template>

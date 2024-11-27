@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { definePrefetchStore } from "@lite-ssr/vue";
+import { axiosApi, ofetchApi } from "../api";
 
 export const useTodo = definePrefetchStore('todo', () => {
     // Инициализация состояний
@@ -11,16 +12,15 @@ export const useTodo = definePrefetchStore('todo', () => {
     const fetchTodo = async (id: number) => {
         loading.value = true;
 
-        const response = await fetch(`http://localhost:3000/api/todos/${id}`);
-
-        if (response.ok) {
-            todo.value = await response.json();
-        } else {
+        // const response = await fetch(`http://localhost:3000/api/todos/${id}`);
+        try {
+            // const res = await ofetchApi(`/todos/${id}`);
+            const { data: res } = await axiosApi.get(`/todos/${id}`);
+            todo.value = res;
+        } catch (e) {
             todo.value = null;
             error.value = true;
         }
-
-        loading.value = false;
     };
 
     // Возвращаем состояния и функции

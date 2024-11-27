@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+### Patch Changes
+
+- Add support for proxy SSR with axios and ofetch
+
 ## 0.4.2
 
 ### Patch Changes

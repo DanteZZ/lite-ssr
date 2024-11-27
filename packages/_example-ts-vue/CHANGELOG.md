@@ -1,5 +1,13 @@
 # example-ts-vue
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - lite-ssr@0.4.3
+  - @lite-ssr/proxy@1.0.3
+
 ## 0.0.4
 
 ### Patch Changes
