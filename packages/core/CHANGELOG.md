@@ -1,5 +1,11 @@
 # @lite-ssr/core
 
+## 0.4.2
+
+### Patch Changes
+
+- feat: Add JavaScript and Node 18 support
+
 ## 0.4.1
 
 ### Patch Changes

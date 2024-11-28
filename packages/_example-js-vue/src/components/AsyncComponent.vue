@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useTodo } from '../composables/useTodo';
 import { useHead } from '@unhead/vue';
 

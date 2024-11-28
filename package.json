@@ -13,7 +13,10 @@
     "build:vue-unhead": "pnpm --filter vue-unhead build",
     "example:dev": "pnpm --filter example-ts-vue dev",
     "example:build": "pnpm --filter example-ts-vue build",
-    "example:serve": "pnpm --filter example-ts-vue serve"
+    "example:serve": "pnpm --filter example-ts-vue serve",
+    "examplejs:dev": "pnpm --filter example-js-vue dev",
+    "examplejs:build": "pnpm --filter example-js-vue build",
+    "examplejs:serve": "pnpm --filter example-js-vue serve"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9"

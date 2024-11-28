@@ -1,6 +1,6 @@
 {
   "name": "@lite-ssr/vue-unhead",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "LiteSSR @unhead/vue plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

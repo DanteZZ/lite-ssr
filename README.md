@@ -3,7 +3,7 @@
     <!-- <img src='' width='250' height='250' /> -->
     <p>Легковесная реализация SSR для Vite.</p>
 
-[Документация](http://lssr.dntz.xyz/)<br/></br>
+[Документация](https://lssr.dntz.xyz/)<br/></br>
 ![TypeScript](https://badgen.net/badge/TypeScript/5.3.3/blue?)
 ![Node.js](https://badgen.net/badge/Node.js/20.17.0/green?)
 ![Vue](https://badgen.net/badge/Vue/3.5.12/cyan?)
