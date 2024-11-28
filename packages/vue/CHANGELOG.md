@@ -1,5 +1,11 @@
 # @lite-ssr/vue
 
+## 0.4.4
+
+### Patch Changes
+
+- Split vue server and client createApp
+
 ## 0.4.3
 
 ### Patch Changes

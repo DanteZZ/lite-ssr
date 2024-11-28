@@ -1,4 +1,4 @@
-import { Component, createApp as create, defineComponent, h, Suspense } from 'vue';
+import { Component, createApp as createServerApp, createSSRApp as createClientApp, defineComponent, h, Suspense } from 'vue';
 import { Plugin } from './VuePlugin.js';
 import { isSSR } from '@lite-ssr/core/shared';
 
@@ -13,7 +13,7 @@ const AppWrapper = (app: Component) => defineComponent({
 });
 
 export const createApp = (App: Component) => {
-    const app = create(AppWrapper(App));
+    const app = isSSR() ? createServerApp(AppWrapper(App)) : createClientApp(AppWrapper(App));
     const originalUse = app.use;
     app.use = (...args: Parameters<typeof originalUse>) => {
         // Здесь можно будет добавить необычные обработчики, к примеру отменять подключение плагинов, если они подключается на стороне сервера
