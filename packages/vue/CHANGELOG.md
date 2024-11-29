@@ -1,5 +1,12 @@
 # @lite-ssr/vue
 
+## 0.4.5
+
+### Patch Changes
+
+- e970f19: feat: make Prefetch composables asynchrously in SSR
+- fix: lint and comments
+
 ## 0.4.4
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [e970f19]
+- Updated dependencies
+  - @lite-ssr/vue@0.4.5
+
 ## 1.0.5
 
 ### Patch Changes

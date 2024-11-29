@@ -1,7 +1,15 @@
 import { isRef, isReactive } from 'vue';
 import { States, Store } from '../definitions/DefinePrefetchStore.js';
 
-// Обработка значений для приведения их к нужному типу (ref, reactive или обычные значения)
+/**
+ * Processes a given value and converts it into the desired type.
+ * 
+ * - For `ref` values, it extracts the inner value using `value`.
+ * - For other types, it returns the value as is.
+ *
+ * @param value - The value to process.
+ * @returns The processed value.
+ */
 function processValue(value: any): any {
     if (isRef(value)) {
         return value.value;
@@ -10,7 +18,15 @@ function processValue(value: any): any {
     }
 }
 
-// Упрощение данных для предварительной загрузки (создание кэша)
+/**
+ * Simplifies prefetched store data into a serializable format.
+ * 
+ * This function creates a cache-friendly representation of the context by extracting values
+ * from `ref` or reactive properties and adding a `__filled` flag to indicate the store's state.
+ *
+ * @param ctx - The context containing stores to simplify.
+ * @returns A simplified version of the context.
+ */
 export function simplifyPrefetchedStores<T>(ctx: T): T {
     const data: Record<string, any> = {};
 
@@ -27,73 +43,69 @@ export function simplifyPrefetchedStores<T>(ctx: T): T {
     return data as T;
 }
 
-
-// Обогащение данных предварительной загрузки
-
+/**
+ * Enriches a store's states using prefetched data from the server.
+ * 
+ * This function synchronizes the client's store state with data received from the server.
+ * It handles `ref`, reactive objects, and special types like `Set` and `Map` to ensure proper updates.
+ *
+ * @param states - The client-side store states.
+ * @param prefetchedStore - The server-side prefetched store data.
+ * @returns The updated client-side states.
+ */
 export function enrichPrefetchedStoreStates(states: States, prefetchedStore: Store) {
-    // Пройдем по всем ключам стейта
     for (const key in states) {
         if (prefetchedStore.hasOwnProperty(key)) {
             const serverValue = prefetchedStore[key];
             const clientValue = states[key];
 
-            // Если это ref, просто заменяем значение
             if (isRef(clientValue)) {
-                // Если пришёл объект, Map, Set или любой другой тип
+                // If the client value is a `ref`, update its value.
                 clientValue.value = serverValue;
-            }
-            // Если это реактивный объект
-            else if (isReactive(clientValue)) {
+            } else if (isReactive(clientValue)) {
+                // If the client value is reactive, handle special types.
                 if (serverValue === null || serverValue === undefined) {
-                    // Если сервер передает null или undefined, очищаем стейт
+                    // Clear reactive objects if the server sends null/undefined.
                     if (clientValue instanceof Set) {
                         clientValue.clear();
                     } else if (clientValue instanceof Map) {
                         clientValue.clear();
                     } else if (typeof clientValue === 'object') {
-                        // Очищаем все свойства объекта
-                        for (const prop in clientValue) {
+                        Object.keys(clientValue).forEach(prop => {
                             delete clientValue[prop];
-                        }
+                        });
                     }
                 } else {
-                    // Обработка случая, когда данные приходят в виде Map или Set
+                    // Synchronize `Set` values.
                     if (clientValue instanceof Set) {
+                        clientValue.clear();
                         if (serverValue instanceof Set) {
-                            clientValue.clear();
+                            serverValue.forEach(item => clientValue.add(item));
+                        } else if (Array.isArray(serverValue)) {
                             serverValue.forEach(item => clientValue.add(item));
                         } else {
-                            // Если сервер прислал не Set, но ожидаем Set, очищаем и добавляем новые элементы
-                            clientValue.clear();
-                            if (Array.isArray(serverValue)) {
-                                serverValue.forEach(item => clientValue.add(item));
-                            } else {
-                                // Если это объект или иной тип, преобразуем его в Set
-                                clientValue.add(serverValue);
-                            }
+                            clientValue.add(serverValue);
                         }
-                    } else if (clientValue instanceof Map) {
+                    }
+                    // Synchronize `Map` values.
+                    else if (clientValue instanceof Map) {
+                        clientValue.clear();
                         if (serverValue instanceof Map) {
-                            clientValue.clear();
                             serverValue.forEach((value, key) => {
                                 clientValue.set(key, value);
                             });
+                        } else if (Array.isArray(serverValue)) {
+                            serverValue.forEach(([key, value]) => {
+                                clientValue.set(key, value);
+                            });
                         } else {
-                            // Если сервер прислал не Map, но ожидаем Map
-                            clientValue.clear();
-                            if (Array.isArray(serverValue)) {
-                                serverValue.forEach(([key, value]) => {
-                                    clientValue.set(key, value);
-                                });
-                            } else {
-                                // Если это обычный объект
-                                Object.entries(serverValue).forEach(([key, value]) => {
-                                    clientValue.set(key, value);
-                                });
-                            }
+                            Object.entries(serverValue).forEach(([key, value]) => {
+                                clientValue.set(key, value);
+                            });
                         }
-                    } else {
-                        // Если это обычный объект, просто обновляем его поля
+                    }
+                    // Synchronize plain objects.
+                    else {
                         Object.assign(clientValue, serverValue);
                     }
                 }
@@ -103,13 +115,20 @@ export function enrichPrefetchedStoreStates(states: States, prefetchedStore: Sto
     return states;
 }
 
-// Обогащение количеств вызовов при загрузке
-
+/**
+ * Enriches the function call counts for asynchronous functions in the store.
+ * 
+ * This ensures that the server-provided call counts are merged into the client-side store.
+ *
+ * @param calls - The client-side call counts for each function.
+ * @param prefetchedStore - The server-side prefetched store containing call counts.
+ * @returns The updated call counts.
+ */
 export function enrichPrefetchedFuncCalls(calls: Record<string, number>, prefetchedStore: Store) {
     for (const key in calls) {
         if (prefetchedStore.__calls.hasOwnProperty(key)) {
             calls[key] = prefetchedStore.__calls[key];
-        };
-    };
+        }
+    }
     return calls;
 }

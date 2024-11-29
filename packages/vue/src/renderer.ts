@@ -1,4 +1,4 @@
-import { VueRenderer } from "./utils/VueRenderer.js";
+import { VueRenderer } from "./common/VueRenderer.js";
 
 const { definePlugin } = VueRenderer;
 export {

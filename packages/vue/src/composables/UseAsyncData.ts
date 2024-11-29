@@ -7,64 +7,95 @@ interface UseAsyncDataResult<T> {
     loading: Ref<boolean>;
 }
 
-// Хэш-функция для генерации уникального кода из строки
+/**
+ * Generates a hash code from a string.
+ * This is used to create a unique identifier for caching purposes.
+ *
+ * @param s - The input string to hash.
+ * @returns A 32-bit integer hash of the input string.
+ */
 function hashCode(s: string): number {
     return s.split("").reduce((a, b) => ((a << 5) - a) + b.charCodeAt(0), 0) & 0xFFFFFFFF;
 }
 
-// Генерация уникального хэша пути компонента на основе его имени и инстанса
+/**
+ * Generates a unique component path hash based on the component's name and instance.
+ * This helps create a consistent cache key for components, even across re-renders.
+ *
+ * @param name - The name of the component.
+ * @param instance - The internal Vue component instance.
+ * @returns A unique hash string representing the component's hierarchy and props.
+ */
 function generateComponentPathHash(name: string, instance: ComponentInternalInstance): string {
     let path = '';
     let parent = instance?.parent;
+
+    // Traverse the parent hierarchy to construct a unique path
     while (parent) {
         const componentInfo = `${name}${JSON.stringify(instance.props)}${instance.vnode.key?.toString() ?? '0'}${parent.type.__file || parent.type.name || 'AnonymousComponent'}->`;
         path = componentInfo + path;
         parent = parent.parent;
     }
+
     return hashCode(path).toString();
 }
 
-// Основная логика для использования асинхронных данных с кэшированием
+/**
+ * A composable to manage asynchronous data with support for caching and server-side rendering.
+ *
+ * @template T - The type of the data being fetched.
+ * @param name - A unique name for the data context, used for caching.
+ * @param fetchDataFn - A function that fetches the data asynchronously.
+ * @returns An object containing:
+ *   - `data`: A reactive reference to the fetched data.
+ *   - `error`: A reactive reference to any error that occurred during the fetch.
+ *   - `loading`: A reactive reference indicating the loading state.
+ *
+ * @throws If the function is called outside of a setup function.
+ */
 export async function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): Promise<UseAsyncDataResult<T>> {
-    const data = ref<T | null>(null);
-    const error = ref<Error | null>(null);
-    const loading = ref(true);
+    const data = ref<T | null>(null); // Stores the fetched data
+    const error = ref<Error | null>(null); // Stores any error that occurs
+    const loading = ref(true); // Tracks the loading state
 
-    // Получаем текущий инстанс компонента
+    // Retrieve the current Vue component instance
     const instance = getCurrentInstance();
     if (!instance) {
         throw new Error('useAsyncData must be called within a setup function.');
     }
 
-    // Получаем контекст (например, для SSR или кэширования)
+    // Access the injected context for SSR or client-side caching
     const context = inject<Record<string, any>>('context', {});
-    const key = `c-${generateComponentPathHash(name, instance)}`;
+    const key = `c-${generateComponentPathHash(name, instance)}`; // Unique key for caching based on the component's path
 
-    // Попытка получить данные из контекста (кэширование)
+    // Check if data is already in the context (cache)
     if (context[key]) {
         data.value = context[key];
         loading.value = false;
     } else {
-        // Запуск асинхронного запроса на сервере или в браузере
+        // Define the fetch logic
         const fetchData = async () => {
             try {
-                data.value = await fetchDataFn();
-                context[key] = data.value;  // Кэшируем данные
+                data.value = await fetchDataFn(); // Fetch the data
+                context[key] = data.value; // Cache the data
             } catch (err) {
-                error.value = err as Error;
+                error.value = err as Error; // Handle any errors
             } finally {
-                loading.value = false;
+                loading.value = false; // Set loading to false after completion
             }
         };
 
         const promise = fetchData();
 
+        // For SSR, register the fetch promise to ensure it completes before rendering
         if (isSSR()) {
             onServerPrefetch(() => promise);
         }
+
+        // Wait for the promise to resolve (also applies to client-side)
         await promise;
-        // Для SSR используем onServerPrefetch
     }
 
+    // Return reactive references for data, error, and loading state
     return { data, error, loading };
 }
