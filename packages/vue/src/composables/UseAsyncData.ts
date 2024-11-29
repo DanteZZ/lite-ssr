@@ -25,7 +25,7 @@ function generateComponentPathHash(name: string, instance: ComponentInternalInst
 }
 
 // Основная логика для использования асинхронных данных с кэшированием
-export function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): UseAsyncDataResult<T> {
+export async function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): Promise<UseAsyncDataResult<T>> {
     const data = ref<T | null>(null);
     const error = ref<Error | null>(null);
     const loading = ref(true);
@@ -57,13 +57,13 @@ export function useAsyncData<T>(name: string, fetchDataFn: () => Promise<T>): Us
             }
         };
 
-        // Для SSR используем onServerPrefetch
-        onServerPrefetch(fetchData);
+        const promise = fetchData();
 
-        // Для браузера сразу запускаем запрос
-        if (!isSSR()) {
-            fetchData();
+        if (isSSR()) {
+            onServerPrefetch(() => promise);
         }
+        await promise;
+        // Для SSR используем onServerPrefetch
     }
 
     return { data, error, loading };

@@ -36,7 +36,9 @@ function processAsyncFunctions<T>(functions: T, store: Store): T {
             if (isSSR()) {
                 store.__calls[key] += 1;
                 isGetPrefetched[key] = true;
-                onServerPrefetch(() => fn(...args));
+                const promise = fn(...args);
+                onServerPrefetch(() => promise);
+                return promise;
             } else if (!isGetPrefetched[key] && store.__calls?.[key] > 0) {
                 isGetPrefetched[key] = true;
             } else {

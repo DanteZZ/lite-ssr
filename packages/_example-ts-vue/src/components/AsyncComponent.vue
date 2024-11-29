@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { useTodo } from '../composables/useTodo';
+import { useAsyncData } from '@lite-ssr/vue';
+// import { useTodo } from '../composables/useTodo';
 import { useHead } from '@unhead/vue';
+import { axiosApi } from '../api';
 
-const { todo, fetchTodo } = useTodo();
+const { data: todo } = await useAsyncData('abobus', async () => {
+    const { data } = await axiosApi.get("/todos/1");
+    return data;
+});
 
-fetchTodo(1);
+// fetchTodo(1);
+console.log(todo.value);
 
 useHead({
     title: () => todo.value?.title
