@@ -3,6 +3,7 @@ import { useAsyncData } from '@lite-ssr/vue';
 import { useTodo } from '../composables/useTodo';
 import { useHead } from '@unhead/vue';
 import { axiosApi } from '../api';
+import { useCachedData } from "@lite-ssr/cached-data/vue";
 
 const { todo, fetchTodo } = useTodo();
 
@@ -10,6 +11,8 @@ const { data: todoData } = await useAsyncData('abobus', async () => {
     const { data } = await axiosApi.get("/todos/1");
     return data;
 });
+
+const cachedTodo = useCachedData('cached-todo');
 
 await fetchTodo(1);
 
@@ -25,5 +28,7 @@ useHead({
         <pre>{{ JSON.stringify(todoData, null, '\t') }}</pre>
         <h2>definePrefetchStore</h2>
         <pre>{{ JSON.stringify(todo, null, '\t') }}</pre>
+        <h2>useCachedData</h2>
+        <pre>{{ JSON.stringify(cachedTodo, null, '\t') }}</pre>
     </div>
 </template>

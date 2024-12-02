@@ -12,6 +12,7 @@ interface RendererHook {
     $entry: string; // The entry point file name
     $config: LssrConfig; // The Lite-SSR configuration object
     url: string; // The current URL being rendered
+    initialState: Record<string, any>
 }
 
 /**
@@ -25,7 +26,8 @@ interface RendererHookTypes {
     'init': RendererHook; // Hook triggered during initialization
     'beforeRender': RendererHook; // Hook triggered before rendering begins
     'beforeFillHtml': RendererHook; // Hook triggered before HTML is populated with data
-    'fillHtml': RendererHook; // Hook triggered when the final HTML is being populated
+    'fillHtml': RendererHook; // Hook triggered when the final HTML is being populated,
+    'fillInitialState': RendererHook; // Hook triggered during initialState initialization
 }
 
 /**

@@ -20,13 +20,14 @@ export class VueRenderer extends Renderer {
      * @param url - The URL being rendered.
      * @returns The hook data object.
      */
-    protected hookData(url: string) {
+    protected hookData(url: string, initialState: Record<string, any> = {}) {
         return {
             $app: this.app!,
             $renderer: this as VueRenderer,
             $config: this.config,
             $entry: this.entryPoint,
             url,
+            initialState
         };
     }
 
@@ -92,10 +93,10 @@ export class VueRenderer extends Renderer {
         this.app!.config.errorHandler = this.errorHandler;
 
         // Dispatch hooks for context provisioning and app initialization.
-        dispatchHook('beforeProvideContext', this.hookData(url));
+        await dispatchHook('beforeProvideContext', this.hookData(url));
         this.app!.provide('context', this.context);
         this.app!.provide('contextStores', this.contextStores);
-        dispatchHook('init', this.hookData(url));
+        await dispatchHook('init', this.hookData(url));
 
         // Check if vue-router is used, and prepare the router for the given URL.
         const router = this.app!._context.config?.globalProperties?.$router || null;
@@ -106,7 +107,7 @@ export class VueRenderer extends Renderer {
         }
 
         // Dispatch the beforeRender hook and render the app to a string.
-        dispatchHook('beforeRender', this.hookData(url));
+        await dispatchHook('beforeRender', this.hookData(url));
         return `<div id="app">${await renderToString(this.app!)}</div>`;
     }
 
@@ -116,10 +117,12 @@ export class VueRenderer extends Renderer {
      * @returns The initial state containing context and prefetched store data.
      */
     getInitialState() {
-        return {
+        const state = {
             states: this.context,
             stores: simplifyPrefetchedStores(this.contextStores),
         };
+        dispatchHook('fillInitialState', this.hookData("", state));
+        return state;
     }
 
     /**

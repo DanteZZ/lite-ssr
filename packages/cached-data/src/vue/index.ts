@@ -1,0 +1,1 @@
+export { useCachedData } from "./composable.js";

@@ -1,0 +1,1 @@
+# LiteSSR cached-data plugin

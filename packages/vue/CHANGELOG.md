@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 0.4.6
+
+### Patch Changes
+
+- Add initial state hook
+- Updated dependencies
+  - @lite-ssr/core@0.4.3
+
 ## 0.4.5
 
 ### Patch Changes

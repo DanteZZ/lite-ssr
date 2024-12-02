@@ -1,5 +1,11 @@
 # @lite-ssr/core
 
+## 0.4.3
+
+### Patch Changes
+
+- Add initial state hook
+
 ## 0.4.2
 
 ### Patch Changes

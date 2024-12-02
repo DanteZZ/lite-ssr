@@ -1,7 +1,7 @@
 {
   "name": "example-ts-vue",
   "private": true,
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "lssr",
@@ -12,6 +12,7 @@
     "@lite-ssr/proxy": "workspace:*",
     "@lite-ssr/vue": "workspace:*",
     "@lite-ssr/vue-unhead": "workspace:*",
+    "@lite-ssr/cached-data": "workspace:*",
     "lite-ssr": "workspace:*",
     "@unhead/vue": "^1.11.13",
     "axios": "^1.7.8",

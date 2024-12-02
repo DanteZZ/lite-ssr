@@ -29,8 +29,7 @@ export async function loadConfig(build: boolean = false, configPath: string = "/
         isTs = true;
         currentPath = configPath + (hasExtension ? "" : ".ts")
         isExist = true;
-        console.log(currentPath);
-    } else if (existsSync(resolve(configPath + (hasExtension ? " " : ".js")))) {
+    } else if (existsSync(resolve(configPath + (hasExtension ? "" : ".js")))) {
         isJs = true;
         currentPath = configPath + (hasExtension ? "" : ".js")
         isExist = true;

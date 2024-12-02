@@ -48,6 +48,9 @@ importers:
 
   packages/_example-ts-vue:
     dependencies:
+      '@lite-ssr/cached-data':
+        specifier: workspace:*
+        version: link:../cached-data
       '@lite-ssr/proxy':
         specifier: workspace:*
         version: link:../proxy
@@ -85,6 +88,25 @@ importers:
       vue-tsc:
         specifier: ^2.1.8
         version: 2.1.10(typescript@5.6.3)
+
+  packages/cached-data:
+    dependencies:
+      '@lite-ssr/vue':
+        specifier: workspace:^
+        version: link:../vue
+      vue:
+        specifier: ^3.5.1
+        version: 3.5.13(typescript@5.6.3)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.11.19
+        version: 20.17.6
+      ts-loader:
+        specifier: ^9.5.1
+        version: 9.5.1(typescript@5.6.3)(webpack@5.96.1)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.6.3
 
   packages/core:
     dependencies:
