@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.6
+
+### Patch Changes
+
+- feat: Add dynamic import
+
 ## 0.4.5
 
 ### Patch Changes

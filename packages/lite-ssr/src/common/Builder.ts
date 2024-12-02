@@ -3,7 +3,7 @@ import { filePathToUrl, LssrConfig, resolve } from "@lite-ssr/core";
 import { build } from "vite";
 import { logError, logInfo, logSuccess } from "@lite-ssr/core";
 import { fileURLToPath } from "url";
-import { readFileSync, rmSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { readFile } from "fs/promises";
 
 export class Builder {
@@ -68,11 +68,12 @@ export class Builder {
             const styles: string[] = [];
 
             (result as any).output.forEach((resFile: any) => {
-                const file: string = resFile.fileName;
-                if (file.endsWith(".js")) {
-                    scripts.push(file)
-                } else if (file.endsWith(".css")) {
-                    styles.push(file)
+                const file = resFile;
+                if (file.fileName.endsWith(".js") && !file.isDynamicEntry) {
+                    scripts.push(file.fileName);
+                }
+                else if (file.fileName.endsWith(".css") && !file.isDynamicEntry) {
+                    styles.push(file.fileName);
                 };
             });
 
