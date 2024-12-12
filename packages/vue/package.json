@@ -1,6 +1,6 @@
 {
   "name": "@lite-ssr/vue",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "LiteSSR Vue module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
+    "@types/express": "^4.17.21",
     "@types/node": "^20.11.19",
     "fix-esm-import-path": "^1.10.1",
     "rollup": "^4.11.0",

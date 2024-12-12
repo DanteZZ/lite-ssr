@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 0.4.7
+
+### Patch Changes
+
+- Add cookies supply
+- Updated dependencies
+  - @lite-ssr/core@0.4.4
+
 ## 0.4.6
 
 ### Patch Changes

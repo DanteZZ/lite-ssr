@@ -2,6 +2,7 @@ import { LssrConfig } from "@lite-ssr/core";
 import { HookSystem } from "@lite-ssr/core/shared";
 import type { App } from "vue";
 import type { VueRenderer } from "../common/VueRenderer.js";
+import { Request } from "express";
 
 /**
  * Interface defining the context passed to hooks during the rendering process.
@@ -11,6 +12,7 @@ interface RendererHook {
     $renderer: VueRenderer; // The SSR renderer instance for Vue
     $entry: string; // The entry point file name
     $config: LssrConfig; // The Lite-SSR configuration object
+    $req: Request;
     url: string; // The current URL being rendered
     initialState: Record<string, any>
 }

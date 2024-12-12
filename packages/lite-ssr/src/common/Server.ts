@@ -2,6 +2,7 @@ import { type LssrConfig, Renderer, logError, filePathToUrl, formatErrorToHtml }
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express, { Request, Response } from 'express';
+import cookieParser from 'cookie-parser';
 import { readFile } from 'fs/promises';
 
 import { showDevServerMessage } from '../utils/Console.js';
@@ -21,6 +22,8 @@ export class Server {
 
     constructor(config: LssrConfig) {
         this.app = express();
+        this.app.use(cookieParser());
+
         this.config = config;
         process.env.LSSR_PORT = this.config.port?.toString();
     }
@@ -81,6 +84,7 @@ export class Server {
         // Создаем рендерер для выбранного фреймворка
         if (this.renderer) {
             try {
+                this.renderer.setReq(req);
                 await dispatchServerHook('request', this.hookRequestData(url, req, res, this.renderer));
                 await dispatchServerHook('renderStart', this.hookRequestData(url, req, res, this.renderer));
                 // Генерируем конечный HTML

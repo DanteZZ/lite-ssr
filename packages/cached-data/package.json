@@ -1,6 +1,6 @@
 {
   "name": "@lite-ssr/cached-data",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "LiteSSR plugin for cache data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

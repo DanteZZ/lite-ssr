@@ -4,6 +4,7 @@ import { getPreloadLinks } from "./PreloadUtils.js";
 import { LssrConfig } from "../types/LssrConfig.js";
 import { defineRendererPlugin } from "../shared/RendererPlugin.js";
 import { formatErrorToHtml } from "../utils/ErrorSerializer.js";
+import type { Request } from "express";
 
 export abstract class Renderer {
     protected entryPoint: string;
@@ -12,6 +13,7 @@ export abstract class Renderer {
     protected config: LssrConfig;
     protected pluginSystem = new PluginSystem<unknown>(this);
     public html: string = "";
+    public req?: Request;
 
     constructor(
         entryPoint: string,
@@ -44,15 +46,30 @@ export abstract class Renderer {
     };
     async generateHtml(url: string, template: string) {
         let t = template;
-
         t = this.fillPreloadLinks(t);
         t = await this.fillApp(t, url);
         t = this.fillInitialState(t);
         t = this.fillEntryStyles(t);
         t = this.fillEntryScripts(t);
+
         this.html = t;
+
+
         return this.html;
     }
+
+    public setReq(req: Request) {
+        this.req = req;
+    }
+
+    public getReq(): Request {
+        if (this.req) {
+            return this.req;
+        } else {
+            throw new Error("Undefined request");
+        }
+    }
+
     static async getHtmlTemplate(): Promise<string | null> {
         return null;
     };

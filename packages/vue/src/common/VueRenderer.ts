@@ -4,6 +4,7 @@ import { Renderer } from '@lite-ssr/core';
 import { simplifyPrefetchedStores } from '../utils/PrefetchStoreConverter.js';
 import { defineHook, dispatchHook } from '../utils/Hooks.js';
 import { defineRendererPlugin } from '@lite-ssr/core/shared';
+import type { Request } from 'express';
 
 /**
  * VueRenderer class is responsible for rendering Vue applications in an SSR context.
@@ -26,6 +27,7 @@ export class VueRenderer extends Renderer {
             $renderer: this as VueRenderer,
             $config: this.config,
             $entry: this.entryPoint,
+            $req: this.getReq() as Request,
             url,
             initialState
         };
@@ -96,6 +98,7 @@ export class VueRenderer extends Renderer {
         await dispatchHook('beforeProvideContext', this.hookData(url));
         this.app!.provide('context', this.context);
         this.app!.provide('contextStores', this.contextStores);
+        this.app!.provide('__cookies', this.getReq().cookies);
         await dispatchHook('init', this.hookData(url));
 
         // Check if vue-router is used, and prepare the router for the given URL.

@@ -1,5 +1,15 @@
 # example-js-vue
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies
+  - lite-ssr@0.4.7
+  - @lite-ssr/vue@0.4.7
+  - @lite-ssr/proxy@1.0.6
+  - @lite-ssr/vue-unhead@1.0.8
+
 ## 0.0.10
 
 ### Patch Changes
