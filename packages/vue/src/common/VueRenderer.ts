@@ -76,6 +76,8 @@ export class VueRenderer extends Renderer {
         this.context = { modules: [] };
         this.contextStores = {};
 
+        const hydration = 'hydration' in this.config ? this.config.hydration : true;
+
         // Dynamically load the application entry point.
         const { default: importedApp } = await this.load(
             /* @vite-ignore */
@@ -111,7 +113,7 @@ export class VueRenderer extends Renderer {
 
         // Dispatch the beforeRender hook and render the app to a string.
         await dispatchHook('beforeRender', this.hookData(url));
-        return `<div id="app">${await renderToString(this.app!)}</div>`;
+        return `<div id="app" ${!hydration ? 'non-h' : ''}>${await renderToString(this.app!)}</div>`;
     }
 
     /**

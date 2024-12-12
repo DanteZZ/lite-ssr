@@ -39,11 +39,19 @@ const AppWrapper = (app: Component) => defineComponent({
  * @returns A configured Vue application instance.
  */
 export const createApp = (App: Component) => {
+
+    // Check is need hydrating
+    let needHydrating: boolean = true;
+    if (!isSSR()) {
+        needHydrating = document.getElementById("app")?.hasAttribute('non-h') ? false : true;
+    }
+
+
     // Create the app instance based on the current rendering environment
-    const app = isSSR()
+    const app = isSSR() || !needHydrating
         ? createServerApp(AppWrapper(App)) // Server-side app creation
         : createClientApp(AppWrapper(App)); // Client-side app creation
-
+    console.log('need hydrating', needHydrating);
     // Save the original `use` method for plugins
     const originalUse = app.use;
 
