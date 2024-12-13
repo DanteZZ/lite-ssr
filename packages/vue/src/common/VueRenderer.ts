@@ -4,7 +4,7 @@ import { Renderer } from '@lite-ssr/core';
 import { simplifyPrefetchedStores } from '../utils/PrefetchStoreConverter.js';
 import { defineHook, dispatchHook } from '../utils/Hooks.js';
 import { defineRendererPlugin } from '@lite-ssr/core/shared';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 
 /**
  * VueRenderer class is responsible for rendering Vue applications in an SSR context.
@@ -28,6 +28,7 @@ export class VueRenderer extends Renderer {
             $config: this.config,
             $entry: this.entryPoint,
             $req: this.getReq() as Request,
+            $res: this.getRes() as Response,
             url,
             initialState
         };
@@ -76,6 +77,8 @@ export class VueRenderer extends Renderer {
         this.context = { modules: [] };
         this.contextStores = {};
 
+        const cookies = Object.fromEntries(Object.entries(this.getReq().cookies).map(([key, val]) => [key, { value: val, options: {} }]));
+
         const hydration = 'hydration' in this.config ? this.config.hydration : true;
 
         // Dynamically load the application entry point.
@@ -100,7 +103,8 @@ export class VueRenderer extends Renderer {
         await dispatchHook('beforeProvideContext', this.hookData(url));
         this.app!.provide('context', this.context);
         this.app!.provide('contextStores', this.contextStores);
-        this.app!.provide('__cookies', this.getReq().cookies);
+
+        this.app!.provide('__cookies', cookies);
         await dispatchHook('init', this.hookData(url));
 
         // Check if vue-router is used, and prepare the router for the given URL.
@@ -113,7 +117,16 @@ export class VueRenderer extends Renderer {
 
         // Dispatch the beforeRender hook and render the app to a string.
         await dispatchHook('beforeRender', this.hookData(url));
-        return `<div id="app" ${!hydration ? 'non-h' : ''}>${await renderToString(this.app!)}</div>`;
+        const appHtml = await renderToString(this.app!);
+
+        // Actualize cookies
+        Object.entries(cookies).forEach(([name, { value, options }]) => {
+            if (Object.keys(options).length || this.getReq().cookies[name] !== value) {
+                this.getRes().cookie(name, value, options);
+            }
+        });
+
+        return `<div id="app" ${!hydration ? 'non-h' : ''}>${appHtml}</div>`;
     }
 
     /**

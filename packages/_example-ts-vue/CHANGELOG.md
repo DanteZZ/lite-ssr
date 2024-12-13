@@ -1,5 +1,17 @@
 # example-ts-vue
 
+## 0.0.12
+
+### Patch Changes
+
+- Add request pass to renderer
+- Updated dependencies
+  - lite-ssr@0.4.8
+  - @lite-ssr/vue@0.4.9
+  - @lite-ssr/proxy@1.0.7
+  - @lite-ssr/cached-data@1.0.3
+  - @lite-ssr/vue-unhead@1.0.9
+
 ## 0.0.11
 
 ### Patch Changes

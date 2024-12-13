@@ -7,6 +7,7 @@ import { vueCachedDataPlugin } from "@lite-ssr/cached-data/plugin-vue";
 export default defineLssrConfig({
     renderer: VueRenderer,
     port: 2000,
+    hydration: false,
     plugins: [
         proxyPlugin({
             '/api': {

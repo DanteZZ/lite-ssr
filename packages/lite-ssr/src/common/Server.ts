@@ -80,11 +80,11 @@ export class Server {
 
         // Объявляем переменные
         const url = req.url;
-
         // Создаем рендерер для выбранного фреймворка
         if (this.renderer) {
             try {
                 this.renderer.setReq(req);
+                this.renderer.setRes(res);
                 await dispatchServerHook('request', this.hookRequestData(url, req, res, this.renderer));
                 await dispatchServerHook('renderStart', this.hookRequestData(url, req, res, this.renderer));
                 // Генерируем конечный HTML

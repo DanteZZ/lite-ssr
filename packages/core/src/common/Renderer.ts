@@ -3,8 +3,7 @@ import { Manifest } from "./ManifestUtils.js";
 import { getPreloadLinks } from "./PreloadUtils.js";
 import { LssrConfig } from "../types/LssrConfig.js";
 import { defineRendererPlugin } from "../shared/RendererPlugin.js";
-import { formatErrorToHtml } from "../utils/ErrorSerializer.js";
-import type { Request } from "express";
+import type { Request, Response } from "express";
 
 export abstract class Renderer {
     protected entryPoint: string;
@@ -14,6 +13,7 @@ export abstract class Renderer {
     protected pluginSystem = new PluginSystem<unknown>(this);
     public html: string = "";
     public req?: Request;
+    public res?: Response;
 
     constructor(
         entryPoint: string,
@@ -61,12 +61,23 @@ export abstract class Renderer {
     public setReq(req: Request) {
         this.req = req;
     }
+    public setRes(res: Response) {
+        this.res = res;
+    }
 
     public getReq(): Request {
         if (this.req) {
             return this.req;
         } else {
             throw new Error("Undefined request");
+        }
+    }
+
+    public getRes(): Response {
+        if (this.res) {
+            return this.res;
+        } else {
+            throw new Error("Undefined response");
         }
     }
 

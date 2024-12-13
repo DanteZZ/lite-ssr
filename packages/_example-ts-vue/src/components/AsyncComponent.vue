@@ -4,7 +4,7 @@ import { useTodo } from "../composables/useTodo";
 import { useHead } from "@unhead/vue";
 import { axiosApi } from "../api";
 import { useCachedData } from "@lite-ssr/cached-data/vue";
-// import { onMounted } from "vue";
+import { onMounted } from "vue";
 
 const cookies = useCookies();
 
@@ -23,13 +23,19 @@ useHead({
   title: () => todo.value?.title,
 });
 
-// onMounted(() => {
-//   setInterval(() => {
-//     cookies.value.counter = (
-//       Number(cookies?.value?.counter) + 1 || 0
-//     ).toString();
-//   }, 1000);
-// });
+if (import.meta.env.SSR) {
+  cookies.set("test", "someSSRValue", {
+    path: "/",
+    secure: false,
+  });
+}
+
+onMounted(() => {
+  cookies.set("counter", "0");
+  setInterval(() => {
+    cookies.set("counter", (Number(cookies.get("counter")) + 1).toString());
+  }, 1000);
+});
 </script>
 
 <template>
@@ -41,6 +47,6 @@ useHead({
     <h2>useCachedData</h2>
     <pre>{{ JSON.stringify(cachedTodo, null, "\t") }}</pre>
     <h3>Cookies</h3>
-    <pre>{{ JSON.stringify(cookies, null, "\t") }}</pre>
+    <pre>{{ JSON.stringify(cookies.getAll(), null, "\t") }}</pre>
   </div>
 </template>

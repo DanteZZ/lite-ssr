@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.8
+
+### Patch Changes
+
+- Add request pass to renderer
+- Updated dependencies
+  - @lite-ssr/core@0.4.5
+
 ## 0.4.7
 
 ### Patch Changes

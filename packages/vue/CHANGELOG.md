@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 0.4.9
+
+### Patch Changes
+
+- Add request pass to renderer
+- Updated dependencies
+  - @lite-ssr/core@0.4.5
+
 ## 0.4.8
 
 ### Patch Changes

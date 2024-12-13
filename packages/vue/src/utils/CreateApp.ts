@@ -51,7 +51,6 @@ export const createApp = (App: Component) => {
     const app = isSSR() || !needHydrating
         ? createServerApp(AppWrapper(App)) // Server-side app creation
         : createClientApp(AppWrapper(App)); // Client-side app creation
-    console.log('need hydrating', needHydrating);
     // Save the original `use` method for plugins
     const originalUse = app.use;
 
