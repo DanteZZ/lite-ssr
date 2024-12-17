@@ -13,6 +13,7 @@ export class VueRenderer extends Renderer {
     private context = { modules: [] as string[] }; // Holds the context, including dynamically loaded modules.
     private contextStores = {} as Record<string, unknown>; // Stores the preloaded state data for the app.
     public app?: App; // The Vue application instance.
+    public appPayload: Record<string, any> = {};
     public defineHook = defineHook; // Utility to define hooks for SSR.
 
     /**
@@ -74,12 +75,15 @@ export class VueRenderer extends Renderer {
      */
     async renderApp(url: string): Promise<string> {
         // Reset context and contextStores for a fresh render.
+        this.appPayload = {};
         this.context = { modules: [] };
         this.contextStores = {};
 
         const cookies = Object.fromEntries(Object.entries(this.getReq().cookies).map(([key, val]) => [key, { value: val, options: {} }]));
 
         const hydration = 'hydration' in this.config ? this.config.hydration : true;
+
+        await dispatchHook('beforeLoadApp', this.hookData(url));
 
         // Dynamically load the application entry point.
         const { default: importedApp } = await this.load(
@@ -89,9 +93,9 @@ export class VueRenderer extends Renderer {
 
         // Determine if the imported app is a function or an App instance.
         if (importedApp instanceof Function && importedApp.constructor.name === "AsyncFunction") {
-            this.app = await importedApp();
+            this.app = await importedApp(this.appPayload);
         } else if (importedApp instanceof Function) {
-            this.app = importedApp();
+            this.app = importedApp(this.appPayload);
         } else {
             this.app = importedApp;
         }
@@ -138,6 +142,7 @@ export class VueRenderer extends Renderer {
         const state = {
             states: this.context,
             stores: simplifyPrefetchedStores(this.contextStores),
+            _pl: this.appPayload
         };
         dispatchHook('fillInitialState', this.hookData("", state));
         return state;

@@ -1,6 +1,6 @@
 {
   "name": "@lite-ssr/vue",
-  "version": "0.4.9",
+  "version": "0.4.10",
   "description": "LiteSSR Vue module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

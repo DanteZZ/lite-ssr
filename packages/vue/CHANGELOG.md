@@ -1,5 +1,11 @@
 # @lite-ssr/vue
 
+## 0.4.10
+
+### Patch Changes
+
+- add appPayload parameter and beforeLoadApp hook
+
 ## 0.4.9
 
 ### Patch Changes

@@ -1,4 +1,7 @@
 import { isSSR } from "@lite-ssr/core/shared";
+import { App } from "vue";
+
+type AsyncAppFunction = (payload?: Record<string, any>) => App | Promise<App>;
 
 /**
  * Defines an asynchronous application-level function that only executes on the client-side.
@@ -17,10 +20,11 @@ import { isSSR } from "@lite-ssr/core/shared";
  *   return app;
  * });
  */
-export function defineAsyncApp(fn: Function): Function {
+export function defineAsyncApp(fn: AsyncAppFunction): Function {
     // Check if the current environment is not SSR
     if (!isSSR()) {
-        fn(); // Execute the function on the client
+        const { _pl } = JSON.parse(window.__INITIAL_STATE__);
+        fn(_pl); // Execute the function on the client
     }
 
     // Return the function for potential reuse or chaining

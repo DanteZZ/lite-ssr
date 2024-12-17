@@ -1,5 +1,5 @@
 import { defineLssrConfig } from "lite-ssr";
-import { VueRenderer } from "@lite-ssr/vue/renderer";
+import { definePlugin, VueRenderer } from "@lite-ssr/vue/renderer";
 import proxyPlugin from "@lite-ssr/proxy";
 import vueUnheadPlugin from "@lite-ssr/vue-unhead";
 import { vueCachedDataPlugin } from "@lite-ssr/cached-data/plugin-vue";
@@ -33,6 +33,11 @@ export default defineLssrConfig({
                 },
                 refreshInterval: 5000
             }
-        ])
+        ]),
+        (definePlugin('test', ({ defineHook }) => {
+            defineHook('beforeLoadApp', ({ $renderer }) => {
+                $renderer.appPayload.someValue = 1337
+            })
+        }))()
     ]
 });

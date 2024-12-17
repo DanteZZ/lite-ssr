@@ -24,6 +24,7 @@ interface RendererHook {
  * passed to the hook when it is triggered.
  */
 interface RendererHookTypes {
+    'beforeLoadApp': RendererHook; // Hook triggered before loading entry file
     'beforeProvideContext': RendererHook; // Hook triggered before providing the context
     'init': RendererHook; // Hook triggered during initialization
     'beforeRender': RendererHook; // Hook triggered before rendering begins

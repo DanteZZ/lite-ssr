@@ -1,5 +1,14 @@
 # example-ts-vue
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies
+  - @lite-ssr/vue@0.4.10
+  - @lite-ssr/cached-data@1.0.3
+  - @lite-ssr/vue-unhead@1.0.9
+
 ## 0.0.12
 
 ### Patch Changes
