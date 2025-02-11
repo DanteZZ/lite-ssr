@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.10
+
+### Patch Changes
+
+- Fix statusCode of renderer
+- Updated dependencies
+  - @lite-ssr/core@0.4.8
+
 ## 0.4.9
 
 ### Patch Changes

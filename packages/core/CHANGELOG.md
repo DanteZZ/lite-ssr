@@ -1,5 +1,11 @@
 # @lite-ssr/core
 
+## 0.4.8
+
+### Patch Changes
+
+- Fix statusCode of renderer
+
 ## 0.4.7
 
 ### Patch Changes
