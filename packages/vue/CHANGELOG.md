@@ -1,5 +1,11 @@
 # @lite-ssr/vue
 
+## 0.4.13
+
+### Patch Changes
+
+- fix crush onPrefetch promises
+
 ## 0.4.12
 
 ### Patch Changes

@@ -52,11 +52,17 @@ function processAsyncFunctions<T>(functions: T, store: Store): T {
 
         result[key] = async (...args: any[]) => {
             if (isSSR()) {
-                store.__calls[key] += 1; // Increment call count for SSR tracking
-                isGetPrefetched[key] = true;
 
                 // Wrap the function execution in a promise for `onServerPrefetch`
-                const promise = fn(...args);
+                const promise = (async () => {
+                    try {
+                        const result = await fn(...args)
+                        store.__calls[key] += 1; // Increment call count for SSR tracking
+                        isGetPrefetched[key] = true;
+                        return result;
+                    } catch (e) { console.error(e) }
+                })()
+
                 onServerPrefetch(() => promise);
 
                 return promise;
