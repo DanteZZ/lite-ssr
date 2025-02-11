@@ -1,5 +1,11 @@
 # @lite-ssr/core
 
+## 0.4.7
+
+### Patch Changes
+
+- Fix $res inside hooks and status property of renderer
+
 ## 0.4.5
 
 ### Patch Changes

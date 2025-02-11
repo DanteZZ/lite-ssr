@@ -97,7 +97,7 @@ export class Server {
                 res.status(200).set({ 'Content-Type': 'text/html' }).end(htmlResult);
                 await dispatchServerHook('afterResponse', this.hookRequestData(url, req, res, this.renderer));
             } catch (e) {
-                res.status(500).set({ 'Content-Type': 'text/html' }).end(formatErrorToHtml(e as Error));
+                res.status(this.renderer.status || 200).set({ 'Content-Type': 'text/html' }).end(formatErrorToHtml(e as Error));
             }
         } else {
             throw new Error("Не удалось инициализировать рендерер");

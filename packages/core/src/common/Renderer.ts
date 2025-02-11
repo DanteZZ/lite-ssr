@@ -14,6 +14,7 @@ export abstract class Renderer {
     public html: string = "";
     public req?: Request;
     public res?: Response;
+    public status: number = 200;
 
     constructor(
         entryPoint: string,
@@ -45,6 +46,9 @@ export abstract class Renderer {
         return getPreloadLinks(modules, this.manifest);
     };
     async generateHtml(url: string, template: string) {
+
+        this.status = 200;
+
         let t = template;
         t = this.fillPreloadLinks(t);
         t = await this.fillApp(t, url);

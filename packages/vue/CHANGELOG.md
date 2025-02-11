@@ -1,5 +1,13 @@
 # @lite-ssr/vue
 
+## 0.4.12
+
+### Patch Changes
+
+- Fix $res inside hooks and status property of renderer
+- Updated dependencies
+  - @lite-ssr/core@0.4.7
+
 ## 0.4.10
 
 ### Patch Changes
